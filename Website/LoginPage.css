@@ -4,7 +4,6 @@
 	align-items: center;
 	flex-flow: column;
 	height: 100vh;
-	margin-top: 3em;
 }
 
 label{
@@ -36,3 +35,6 @@ button {
 	text-shadow: 0 5px 12.5px black;
 }
 
+i{
+	margin-top: .5em;
+}
