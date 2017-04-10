@@ -36,17 +36,17 @@ if (isset($_GET['Message']))
 			break;
 			
 			case '4':
+				echo '<h2><font color=red><center>';
+				echo 'Call for help (r1 != d1 ro r2 != d2)';
+				echo '</h2>';
+			break;
+						
+			case '5':
 				echo '<h2><font color=green><center>';
 				echo 'when this baby hits 88 mph you are gonna see some serious shit';
 				echo '</h2>';
 			break;
-			
-			case '5':
-				echo '<h2><font color=red><center>';
-				echo 'call for help (meer dan 1 in reactie van database)';
-				echo '</h2>';
-			break;
-			
+
 			case '6':
 				echo '<h2><font color=red><center>';
 				echo 'unknown error';

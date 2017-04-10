@@ -13,7 +13,7 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 	$Device2 = ($_GET['Device2']);
 	// Go through all options for the selection of devices:
 	// Ask the database if the device is in there by preparing the statment first
-	$stmt = $con_db->prepare("Select DISTINCT Device_id from Device where Device_ID = ?");
+	$stmt = $con_db->prepare("Select Device_id from Device where Device_ID = ?");
 	// Next fire the sql statmend at the db with the first device.
 	$stmt->execute([$_GET['Device1']]);
 	//store the results in the form of an object in result1
@@ -37,14 +37,14 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 			header("Location: LoginPage.php?Message=3");
 			exit;
 		}
-	elseif ((($result1->Device_id) == ($_GET['Device1'])) && (($result2->Device_id) == ($_GET['Device2'])))
-		{
-			header("Location: LoginPage.php?Message=4"); // TODO pas aan naar dashboard
-			exit;
-		}
 	elseif ((($result1->Device_id) != ($_GET['Device1'])) || (($result2->Device_id) != ($_GET['Device2'])))
 		{
 			header("Location: LoginPage.php?Message=5");
+			exit;
+		}
+	elseif ((($result1->Device_id) == ($_GET['Device1'])) && (($result2->Device_id) == ($_GET['Device2'])))
+		{
+			header("Location: LoginPage.php?Message=4"); // TODO pas aan naar dashboard
 			exit;
 		}
 	else
