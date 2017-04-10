@@ -9,8 +9,8 @@
 //Make sure the Devices are in the database
 if(isset($_GET['Device1']) && isset($_GET['Device2']))
 {
-	$Device1 = ($_GET['Device1']);
-	$Device2 = ($_GET['Device2']);
+	$Device1 = strtoupper ($_GET['Device1']);
+	$Device2 = strtoupper ($_GET['Device2']);
 	// Go through all options for the selection of devices:
 	// Ask the database if the device is in there by preparing the statment first
 	$stmt = $con_db->prepare("Select Device_id from Device where Device_ID = ?");
@@ -37,20 +37,25 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 			header("Location: LoginPage.php?Message=3");
 			exit;
 		}
-	elseif ((($result1->Device_id) != ($_GET['Device1'])) || (($result2->Device_id) != ($_GET['Device2'])))
+	elseif (($result1->Device_id) != $Device1 || (($result2->Device_id) != $Device2))
 		{
-			header("Location: LoginPage.php?Message=5");
+			header("Location: LoginPage.php?Message=4");
 			exit;
 		}
-	elseif ((($result1->Device_id) == ($_GET['Device1'])) && (($result2->Device_id) == ($_GET['Device2'])))
+	elseif ((($result1->Device_id) == ($Device1)) && (($result2->Device_id) == ($Device2)))
 		{
-			header("Location: LoginPage.php?Message=4"); // TODO pas aan naar dashboard
+			header("Location: LoginPage.php?Message=5"); // TODO pas aan naar dashboard
 			exit;
 		}
-	else
+	 else
 		{
 			header("Location: LoginPage.php?Message=6");
 			exit;
+			// print_r ($result1->Device_id);
+			// print ($Device1);
+			// ECHO '<BR>';
+			// print_r ($result2->Device_id);
+			// print ($Device2);
 		}
 	
 
