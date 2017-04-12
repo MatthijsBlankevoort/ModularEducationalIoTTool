@@ -44,7 +44,7 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 		}
 	elseif ((($result1->Device_id) == ($Device1)) && (($result2->Device_id) == ($Device2)))
 		{
-			header("Location: LoginPage.php?Message=5"); // TODO pas aan naar dashboard
+			header("Location: Dashboard.html"); // TODO pas aan naar dashboard
 			exit;
 		}
 	 else
@@ -57,6 +57,7 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 			// print_r ($result2->Device_id);
 			// print ($Device2);
 		}
+        
 	
 
 	// /* Redirect browser */
@@ -66,8 +67,86 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 		// exit;	
 }
 
+//Get variables from sensor NodeMCU
+//Todo make an if() for url of actuator which only sends ID, actuatorID, function
+	if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sensorId']) && isset($_GET['value']))
+    {
+        $deviceID       = ($_GET['deviceId']);
+        $deviceFunctie  = ($_GET['deviceFunctie']);//of het een sensor of actuator is. todo: geef elke cat. sensor een bepaalde ID
+        $sensorId       = ($_GET['sensorId']);
+        $value          = ($_GET['value']);
+		
+    //Todo: Controleer of deviceID bestaat in database zo ja dan...
+	   
+	    $stmt = $con_db->prepare("Select Device_ID from Device where Device_ID = ?");
+		$stmt->execute([$_GET['deviceId']]);
+		$result = $stmt->fetch(PDO::FETCH_OBJ);
+		// print_r ($result->Device_ID);
+		
+		
+		if ($result->Device_ID == ($_GET['deviceId']))
+		{
+		// echo 'deviceID';
+			if($deviceFunctie == "sensor") 
+			{  
+				//Todo: Haal threshold uit database op basis van ID, en functie 
+				$threshold = 11; 
+				// echo $threshold;
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			// Todo: stuur variabelen naar de database!!!
+			
+			
+			
+			// $stmt = $con_db->prepare("INSERT INTO ? (?,?,?) VALUE (?,?,?);");
+			$stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
+			if ($stmt->execute())
+			// if ($stmt->execute(['Sensor_Log', 'Sensor_ID', 'Sensor_Timestamp', 'Last_Sensor_Data', $sensorid2, 'now()', $value2]))
+			{
+				$response1 = 1;
+				echo 'done';
+			}
+			else
+			{
+				$response1 = 0;
+				echo 'nope';
+			}
+			}
+			if($deviceFunctie == "actuator") 
+			{
 
+				//Todo: Haal configuratie uit database op basis van ID, en functie
+			$stmt = $con_db->prepare('select * from Sensor_Log ORDER BY Sensor_Timestamp DESC LIMIT 1');	
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+			echo $result['0'];
+			
+				// Todo: Haal laatste sensor waarde op en stuur door !!!
+				$configuratie = 20; 
+				// $value = 60;
+				// $response = $configuratie . ',' . $dc['value'];
+				// echo ($configuratie);
+				// echo (",");
+				// echo ($value);
+				
+			}
+
+
+		}
+		else
+		{
+			
+
+		}
+		
+		
+        
+	///////////////////////////////////////////////////////
 	
+	
+      
+        
+        
+        
+        
+    }
 ?>
