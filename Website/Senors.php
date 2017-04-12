@@ -1,7 +1,7 @@
 <!doctype html>
 <title>IoT Workshop</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="main.css">
+<link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css?family=Maven+Pro" rel="stylesheet">
 <div class="middle-container">
   <div>
