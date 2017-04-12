@@ -15,6 +15,7 @@ int sensorId = 0;//sensorID/Address
 int checkVal = 0;//Check
 String chipID;
 String serverURL = SERVER_URL;
+String response;
 OpenWiFi hotspot;
 
 
@@ -74,7 +75,7 @@ void loop() {
   ESP.wdtFeed();
   get_Light();
   Serial.println("Address, value, check: ");
-  delay(10);
+  delay(1000);
 
   //Check for button press
   if (digitalRead(BUTTON_PIN) == LOW)
@@ -106,17 +107,17 @@ void requestMessage()
 
   HTTPClient http;
   //String requestString = serverURL + "/api.php?t=gqi&d=" + chipID + "&v=2";
-  String requestString = serverURL + "/api.php?deviceId=" + chipID + "&sensorId=" + sensorId + "&value=" + lightVal;
+  String requestString = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=sensor" + "&sensorId=" + sensorId + "&value=" + lightVal;
 
   http.begin(requestString);
 
   uint16_t httpCode = http.GET();
-
+  //Response code for sensor module
   if (httpCode == 200)
   {
-    String response;
     response = http.getString();
-    //Serial.println(response);
+    Serial.print("response: ");
+    Serial.println(response);
 
     if (response == "-1")
     {
@@ -124,23 +125,8 @@ void requestMessage()
     }
     else
     {
-      //Get the indexes of some commas, will be used to split strings
-      int firstComma = response.indexOf(',');
-      int secondComma = response.indexOf(',', firstComma + 1);
-      int thirdComma = response.indexOf(',', secondComma + 1);
-
-      //Parse data as strings
-      String hexColor = response.substring(0, 7);
-      String springConstant = response.substring(firstComma + 1, secondComma);
-      String dampConstant = response.substring(secondComma + 1, thirdComma);;
-      String message = response.substring(thirdComma + 1, response.length());;
-
-      printDebugMessage("Message received from server: \n");
-      printDebugMessage("Hex color received: " + hexColor);
-      printDebugMessage("Spring constant received: " + springConstant);
-      printDebugMessage("Damp constant received: " + dampConstant);
-      printDebugMessage("Message received: " + message);
-
+   // Serial.print("response: ");
+    //Serial.println(response);
     }
   }
   else
