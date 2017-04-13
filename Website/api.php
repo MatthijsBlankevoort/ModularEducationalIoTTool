@@ -118,10 +118,13 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 			$stmt = $con_db->prepare('select * from Sensor_Log ORDER BY Sensor_Timestamp DESC LIMIT 1');	
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-			echo $result['0'];
 			
 				// Todo: Haal laatste sensor waarde op en stuur door !!!
-				$configuratie = 20; 
+				$configuratie = 20;
+			$response = $configuratie . ',' . $result['0'];
+			echo $response;
+			// echo $configuratie
+			// echo $result['0'];
 				// $value = 60;
 				// $response = $configuratie . ',' . $dc['value'];
 				// echo ($configuratie);

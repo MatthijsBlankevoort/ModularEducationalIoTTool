@@ -11,8 +11,7 @@
   require_once('config.php');
   require_once('database.php');
   
-if (isset($_GET['Start'])) 
-{
+
 	$stmt = $con_db->prepare("Select Sensor_type from Sensor where Sensor_active = '1';");
 	// Next fire the sql statmend at the db with the first device.
 	$stmt->execute();
@@ -26,7 +25,7 @@ if (isset($_GET['Start']))
 		
 	}
 			
-}
+
 ?>	
 	
 	
