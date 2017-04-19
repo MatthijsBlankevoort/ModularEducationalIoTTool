@@ -68,7 +68,7 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 }
 
 //Get variables from sensor NodeMCU
-//Todo make an if() for url of actuator which only sends ID, actuatorID, function
+	//Todo make an if() for url of actuator which only sends ID, actuatorID, function
 	if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sensorId']) && isset($_GET['value']))
     {
         $deviceID       = ($_GET['deviceId']);
@@ -76,7 +76,7 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
         $sensorId       = ($_GET['sensorId']);
         $value          = ($_GET['value']);
 		
-    //Todo: Controleer of deviceID bestaat in database zo ja dan...
+		//Todo: Controleer of deviceID bestaat in database zo ja dan... x
 	   
 	    $stmt = $con_db->prepare("Select Device_ID from Device where Device_ID = ?");
 		$stmt->execute([$_GET['deviceId']]);
@@ -89,38 +89,79 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 		// echo 'deviceID';
 			if($deviceFunctie == "sensor") 
 			{  
-				//Todo: Haal threshold uit database op basis van ID, en functie 
+				//Todo: Haal threshold uit database op basis van ID, en functie ?
 				$threshold = 11; 
 				// echo $threshold;
 
-			// Todo: stuur variabelen naar de database!!!
-			
-			
-			
+			//stuur variabelen naar de database x
 			// $stmt = $con_db->prepare("INSERT INTO ? (?,?,?) VALUE (?,?,?);");
-			$stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
+			// TODO Optimice using loop thats looks for 20 entrys. if so update the oldest one
+			// get 20 rows from database
+			//set sensor log limite:
+			$SensorLogLimite = '21';
+			$stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '$sensorId' ORDER BY Sensor_Timestamp");
+			echo 'yes';
 			if ($stmt->execute())
-			// if ($stmt->execute(['Sensor_Log', 'Sensor_ID', 'Sensor_Timestamp', 'Last_Sensor_Data', $sensorid2, 'now()', $value2]))
-			{
-				$response1 = 1;
-				echo 'done';
-			}
-			else
-			{
-				$response1 = 0;
-				echo 'nope';
-			}
-			}
+				if($stmt->rowCount() > 20) {
+				// Determine which fields to update
+					$result = $stmt->fetchall(PDO::FETCH_ASSOC); 
+					$stmt = $con_db->prepare("UPDATE Sensor_Log SET Sensor_ID = '$sensorId',Sensor_Timestamp = now(),Last_Sensor_Data = '$value'
+											WHERE Sensor_Timestamp=(select min(Sensor_Timestamp) from (select * from Sensor_Log) temp1 where temp1.Sensor_ID = '$sensorId');"
+											);
+					if ($stmt->execute())
+					{
+						$response1 = 1;
+						echo 'done';
+					}
+					else
+					{
+						$response1 = 0;
+						echo 'nope';
+					}
+				}
+				else
+				{
+				 	$stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
+					if ($stmt->execute())
+			
+					{
+						$response1 = 1;
+						echo 'done';
+					}
+					else
+					{
+						$response1 = 0;
+						echo 'nope';
+					}
+				}
+			}	
+	
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+			//if ($stmt->execute(['Sensor_Log', 'Sensor_ID', 'Sensor_Timestamp', 'Last_Sensor_Data', $sensorid2, 'now()', $value2]))
+			// $stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
+			// if ($stmt->execute())
+			
+			// {
+				// $response1 = 1;
+				// echo 'done';
+			// }
+			// else
+			// {
+				// $response1 = 0;
+				// echo 'nope';
+			// }
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 			if($deviceFunctie == "actuator") 
 			{
 
-				//Todo: Haal configuratie uit database op basis van ID, en functie
+			//Todo: Haal configuratie uit database op basis van ID, en functie
+			//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
 			$stmt = $con_db->prepare('select * from Sensor_Log ORDER BY Sensor_Timestamp DESC LIMIT 1');	
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 			
-				// Todo: Haal laatste sensor waarde op en stuur door !!!
-				$configuratie = 20;
+			// Todo: Haal laatste sensor waarde op en stuur door !!!
+			$configuratie = 20;
 			$response = $configuratie . ',' . $result['0'];
 			echo $response;
 			// echo $configuratie
