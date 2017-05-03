@@ -1,7 +1,7 @@
 /*
     Attiny code slave module
-    Actuator LED light
-
+    Door Filmon
+    Tilt sensor uitlezen en versturen op I2C bus.
 
 
    SETUP:
@@ -16,38 +16,36 @@
 
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines
 #include "usiTwiSlave.h"
+#include <dht.h>
 
-#define I2C_SLAVE_ADDR  0x02
-#define ledPin   1
+dht DHT;
 
-uint8_t flipped = 0;
-uint16_t lichtWaarde = 0;
-uint8_t a = 55;
+#define I2C_SLAVE_ADDR  0x04
+#define DHT11_PIN 1
+
+int flipped = 0;
+uint8_t tiltWaarde = 0;
 unsigned char bytes[4];
-int byteRcvd = 0;
+byte byteRcvd = 0;
+char c = 'l';
 
 
 
 void setup() {
   TinyWireS.begin(I2C_SLAVE_ADDR);      // init I2C Slave mode
-  pinMode(ledPin, OUTPUT);
 }
 
 void loop() {
+  int chk = DHT.read11(DHT11_PIN);
+  //flipped = digitalRead(tiltPin);
 
+  TinyWireS.send(DHT.temperature);           //tilt waarde
   if (TinyWireS.available()) {          // got I2C input!
-    // byteRcvd = (TinyWireS.receive() | TinyWireS.receive() << 8);     // get the 2 bytes from master
-    byteRcvd = TinyWireS.receive();     // get the 2 bytes from master
-    TinyWireS.send(byteRcvd);           //check
+    byteRcvd = TinyWireS.receive();     // get the byte from master
+    TinyWireS.send(byteRcvd);           //stuurt ontvangen byte terug naar master om te debuggen
     TinyWireS.send(I2C_SLAVE_ADDR);     //ID
-
   }
-  if (byteRcvd > 160) {
-    digitalWrite(ledPin, LOW);
-  }
-  else {
-    digitalWrite(ledPin, HIGH);
-  }
+  delay(1000);
 
 }
 

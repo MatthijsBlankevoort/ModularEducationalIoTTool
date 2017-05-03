@@ -1,4 +1,4 @@
-#include<OpenWiFi.h>
+#include <OpenWiFi.h>
 #include  <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <WiFiManager.h>
@@ -58,6 +58,7 @@ void giveCommand(int command) {
   Serial.println(command);
   Wire.beginTransmission(actuator);
   Wire.write(command);
+ // Wire.write(command >> 8);
   Wire.endTransmission();
   delay(5);
 

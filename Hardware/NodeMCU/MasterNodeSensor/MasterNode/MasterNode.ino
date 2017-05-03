@@ -5,7 +5,7 @@
 #include <Wire.h>
 #include "config.h"
 
-#define device 0x01
+#define device 0x04
 
 
 int oldTime = 0;
@@ -62,6 +62,7 @@ void get_Light() {
   Wire.requestFrom(device, 3);
   while (Wire.available()) {
     sensorId = Wire.read();//address slave
+    //lightVal = (Wire.read() | Wire.read() << 8);//licht waarde
     lightVal = Wire.read();//licht waarde
     checkVal = Wire.read();//check
   }
@@ -107,7 +108,7 @@ void requestMessage()
 
   HTTPClient http;
   //String requestString = serverURL + "/api.php?t=gqi&d=" + chipID + "&v=2";
-  String requestString = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=sensor" + "&sensorId=" + sensorId + "&value=" + lightVal;
+  String requestString = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=sensor" + "&sensorId=00" + sensorId + "&value=" + lightVal;
 
   http.begin(requestString);
 

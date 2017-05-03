@@ -1,7 +1,7 @@
 /*
     Attiny code slave module
-    Actuator LED light
-
+    Door Filmon
+    Tilt sensor uitlezen en versturen op I2C bus.
 
 
    SETUP:
@@ -17,37 +17,43 @@
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines
 #include "usiTwiSlave.h"
 
-#define I2C_SLAVE_ADDR  0x02
-#define ledPin   1
+#define trigPin 4
+#define echoPin 1
+#define I2C_SLAVE_ADDR  0x04
 
-uint8_t flipped = 0;
-uint16_t lichtWaarde = 0;
-uint8_t a = 55;
 unsigned char bytes[4];
-int byteRcvd = 0;
+byte byteRcvd = 0;
+char c = 'l';
 
 
 
 void setup() {
   TinyWireS.begin(I2C_SLAVE_ADDR);      // init I2C Slave mode
-  pinMode(ledPin, OUTPUT);
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
 }
 
 void loop() {
 
-  if (TinyWireS.available()) {          // got I2C input!
-    // byteRcvd = (TinyWireS.receive() | TinyWireS.receive() << 8);     // get the 2 bytes from master
-    byteRcvd = TinyWireS.receive();     // get the 2 bytes from master
-    TinyWireS.send(byteRcvd);           //check
-    TinyWireS.send(I2C_SLAVE_ADDR);     //ID
+  long duration, distance;
+  digitalWrite(trigPin, LOW);  // Added this line
+  delayMicroseconds(2); // Added this line
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10); // Added this line
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration / 2) / 29.1;
 
+
+
+
+  TinyWireS.send(distance);             //sensor waarde
+  if (TinyWireS.available()) {          // got I2C input!
+    byteRcvd = TinyWireS.receive();     // get the byte from master
+    TinyWireS.send(byteRcvd);           //stuurt ontvangen byte terug naar master om te debuggen
+    TinyWireS.send(I2C_SLAVE_ADDR);     //ID
   }
-  if (byteRcvd > 160) {
-    digitalWrite(ledPin, LOW);
-  }
-  else {
-    digitalWrite(ledPin, HIGH);
-  }
+  delay(1000);
 
 }
 
