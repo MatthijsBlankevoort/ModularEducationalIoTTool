@@ -97,90 +97,103 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 	//Todo: Controleer of deviceID bestaat in database zo ja dan... x
    
 	$stmt = $con_db->prepare("Select Device_ID from Device where Device_ID = ?");
-	$stmt->execute([$_GET['deviceId']]);
+	if($stmt->execute([$_GET['deviceId']]))
+	{
+		
+	
 	$result = $stmt->fetch(PDO::FETCH_OBJ);
 	// print_r ($result->Device_ID);
 	
 	
-	if ($result->Device_ID == ($_GET['deviceId']))
-	{
-	// echo 'deviceID';
-		if($deviceFunctie == "sensor") 
-		{  
+		if ($result->Device_ID == ($_GET['deviceId']))
+		{
+		// echo 'deviceID';
+			if($deviceFunctie == "sensor") 
+			{  
 			//Todo: Haal threshold uit database op basis van ID, en functie ?
 			$threshold = 11; 
 			// echo $threshold;
 
-		//stuur variabelen naar de database x
-		// $stmt = $con_db->prepare("INSERT INTO ? (?,?,?) VALUE (?,?,?);");
-		// TODO Optimice using loop thats looks for 20 entrys. if so update the oldest one
-		// get 20 rows from database
-		//set sensor log limite:
-		$stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '$sensorId' ORDER BY Sensor_Timestamp");
-		if ($stmt->execute())
-			// if there are more than 20 entrys update the oldest entry
-			if($stmt->rowCount() > 20) {
-				$stmt = $con_db->prepare("UPDATE Sensor_Log SET Sensor_ID = '$sensorId',Sensor_Timestamp = now(),Last_Sensor_Data = '$value'
-										WHERE Sensor_Timestamp=(select min(Sensor_Timestamp) from (select * from Sensor_Log) temp1 where temp1.Sensor_ID = '$sensorId');"
-										);
-				if ($stmt->execute())
-				{
-					echo 'done update';
+			$stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '$sensorId' ORDER BY Sensor_Timestamp");
+			if ($stmt->execute())
+				// if there are more than 20 entrys update the oldest entry
+				if($stmt->rowCount() > 20) {
+					$stmt = $con_db->prepare("UPDATE Sensor_Log SET Sensor_ID = '$sensorId',Sensor_Timestamp = now(),Last_Sensor_Data = '$value'
+											WHERE Sensor_Timestamp=(select min(Sensor_Timestamp) from (select * from Sensor_Log) temp1 where temp1.Sensor_ID = '$sensorId');"
+											);
+					if ($stmt->execute())
+					{
+						echo 'done update';
+					}
+					else
+					{
+						echo 'nope';
+					}
 				}
+				// else insert a new data entry
 				else
 				{
-					echo 'nope';
+					$stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
+					if ($stmt->execute())
+					{
+						echo 'done insert';
+					}
+					else
+					{
+						echo 'nope';
+					}
 				}
+			}	
+
+		///////////////////////////////////////////////////////////////////////////////////////////////////////
+			//if ($stmt->execute(['Sensor_Log', 'Sensor_ID', 'Sensor_Timestamp', 'Last_Sensor_Data', $sensorid2, 'now()', $value2]))
+			// $stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
+		///////////////////////////////////////////////////////////////////////////////////////////////////////
+			if($deviceFunctie == "actuator") 
+			{
+
+			//Todo: Haal configuratie uit database op basis van ID, en functie
+			//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
+			$stmt = $con_db->prepare("select Last_Sensor_Data from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' and Sensor.Sensor_ID = '$sensorId' and Device_Device_ID = '$deviceID' 
+									  order by Sensor_Timestamp Limit 1");	
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+			$SensorValue = $result['0'];
+			$stmt = $con_db->prepare("Select Configuratie_ID from Device where Device_ID = '$deviceID'; ");
+			if ($stmt->execute())
+			{
+				$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+				$configuratie = ($result['0']);
 			}
-			// else insert a new data entry
 			else
 			{
-				$stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
-				if ($stmt->execute())
-				{
-					echo 'done insert';
-				}
-				else
-				{
-					echo 'nope';
-				}
+				echo 'No Configuratie_ID from database call';
 			}
-		}	
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-		//if ($stmt->execute(['Sensor_Log', 'Sensor_ID', 'Sensor_Timestamp', 'Last_Sensor_Data', $sensorid2, 'now()', $value2]))
-		// $stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-		if($deviceFunctie == "actuator") 
-		{
-
-		//Todo: Haal configuratie uit database op basis van ID, en functie
-		//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
-		$stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '$sensorId' ORDER BY Sensor_Timestamp DESC LIMIT 1");	
-		$stmt->execute();
-		$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-		
-		// Todo: Haal laatste sensor waarde op en stuur door !!!
-		$configuratie = 20;
-		$response = $configuratie . ',' . $result['0'];
-		echo $response;
-		// echo $configuratie
-		// echo $result['0'];
-			// $value = 60;
-			// $response = $configuratie . ',' . $dc['value'];
-			// echo ($configuratie);
-			// echo (",");
-			// echo ($value);
 			
+			$response = $configuratie . ',' . $SensorValue;
+			echo $response;
+			// echo $configuratie
+			// echo $result['0'];
+				// $value = 60;
+				// $response = $configuratie . ',' . $dc['value'];
+				// echo ($configuratie);
+				// echo (",");
+				// echo ($value);
+				
+			}
+
+
 		}
-
-
-	}
 		else
 		{
-		echo 'unknown function of device';
+		echo ('Device ID not in database unable to insert data');
 		}
-	}	
+	}
+	else
+	{
+		echo('Unable to Contact database');
+	}
+}
 	
 if (isset($_POST['sensorpage']))
 {

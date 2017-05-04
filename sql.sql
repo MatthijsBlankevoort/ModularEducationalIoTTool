@@ -26,3 +26,13 @@ SET Configuratie_ID = 9
 WHERE Device_ID = 'TEST2';
 
 Update Sensor SET Device_Device_ID = 'TEST1' where Sensor_Type = 'Lichtsensor';
+
+SELECT Sensor_Log.Last_Sensor_Data, Sensor_Log.Sensor_ID, Sensor.Sensor_ID, Sensor.Device_Device_ID
+from Sensor_Log
+Full Join Sensor ON Sensor_Log.Sensor_ID = Sensor.Sensor_ID;
+
+
+select Last_Sensor_Data, Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '002' and Sensor.Sensor_ID = '002' and Device_Device_ID = 'Standby' 
+order by Sensor_Timestamp Limit 1;
+
+Select Configuratie_ID from Device where Device_ID = 'Standby'; 
