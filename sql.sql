@@ -36,3 +36,9 @@ select Last_Sensor_Data, Sensor_Timestamp from Sensor_Log, Sensor where Sensor_L
 order by Sensor_Timestamp Limit 1;
 
 Select Configuratie_ID from Device where Device_ID = 'Standby'; 
+
+select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '002' 
+and Sensor.Sensor_ID = '002' and Device_Device_ID = 'Standby' order by Sensor_Timestamp;
+
+UPDATE Sensor_Log,Sensor SET Sensor_Timestamp = now(),Last_Sensor_Data = '200'
+WHERE Sensor_Timestamp=(select min(Sensor_Timestamp) from (select * from Sensor_Log) temp1 where temp1.Sensor_ID = '002') and Device_Device_ID = 'Standby'

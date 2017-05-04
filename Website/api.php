@@ -114,12 +114,15 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 			$threshold = 11; 
 			// echo $threshold;
 
-			$stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '$sensorId' ORDER BY Sensor_Timestamp");
+			$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' 
+									and Sensor.Sensor_ID = '$sensorId' and Device_Device_ID = '$deviceID' 
+									order by Sensor_Timestamp ");
 			if ($stmt->execute())
 				// if there are more than 20 entrys update the oldest entry
 				if($stmt->rowCount() > 20) {
-					$stmt = $con_db->prepare("UPDATE Sensor_Log SET Sensor_ID = '$sensorId',Sensor_Timestamp = now(),Last_Sensor_Data = '$value'
-											WHERE Sensor_Timestamp=(select min(Sensor_Timestamp) from (select * from Sensor_Log) temp1 where temp1.Sensor_ID = '$sensorId');"
+					$stmt = $con_db->prepare("UPDATE Sensor_Log,Sensor SET Sensor_Timestamp = now(),Last_Sensor_Data = '$value'
+											WHERE Sensor_Timestamp=(select min(Sensor_Timestamp) from (select * from Sensor_Log) 
+											temp1 where temp1.Sensor_ID = '$sensorId') and Device_Device_ID = '$deviceID'"
 											);
 					if ($stmt->execute())
 					{
@@ -127,7 +130,9 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 					}
 					else
 					{
-						echo 'nope';
+						echo 'No Update is progrest. make sure all the things are in order';
+						echo ($sensorId);
+						echo ($deviceID);
 					}
 				}
 				// else insert a new data entry
