@@ -7,10 +7,8 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                         data-target="#myNavbar">
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
@@ -31,8 +29,14 @@
     </nav>
 	   <div class="container">
         <div class="row">
-
-        <?php
+		<form method="post" action="api.php">
+		<div class="form-group form-center text-center">
+		<br><br><br><br><br><br><br><br>
+		<label for="Device1">Sensor Device:</label>
+		<p>
+		
+		
+		<?php
           require_once('config.php');
           require_once('database.php');
 
@@ -42,17 +46,29 @@
             $stmt->execute();
             //store the results in the form of an string in result and filter only the first colum out
             $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-            echo ('<br><br><br><br><br><br><br><br>');
+            
+		
+		
             for($i = 0; $i < ($stmt->rowCount()); $i++)
             {
-                echo $result[$i];
-                echo ('<br>');
+				
+				echo('<input type="radio" name=sensor');
+				
+				echo(" value=");
+				
+				echo($result[$i]);
+				echo('>');
+				echo($result[$i]);
+				echo('<p>');
+				
 
             }
-
+			
 
         ?>
-		
+		<input type="text" name="sensorpage" value="1" style="visibility:hidden;" />
+		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg">Submit</button>
+		</form>
 		</div>
     </div>
 </body>

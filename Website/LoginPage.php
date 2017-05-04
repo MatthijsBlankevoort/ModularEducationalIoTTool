@@ -73,7 +73,7 @@ if (isset($_GET['Message']))
 					<input type="text" name="Device2" placeholder="Actuator ID">
 				</div>
 			</div>
-	
+			
 			</div>
 			<button type="submit" class="btn btn-block btn-primary btn-lg">Connect</button>
 		</form>

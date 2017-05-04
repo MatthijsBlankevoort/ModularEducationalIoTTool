@@ -44,7 +44,9 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 		}
 	elseif ((($result1->Device_id) == ($Device1)) && (($result2->Device_id) == ($Device2)))
 		{
-			header("Location: Dashboard.html"); // TODO pas aan naar dashboard
+			header("Location: Dashboard.html"); 
+			setcookie('Device1', $_GET['Device1'], time()+60*60*24);
+            setcookie('Device2', $_GET['Device2'], time()+60*60*24);
 			exit;
 		}
 	 else
@@ -145,10 +147,10 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 			}
 		}	
 
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
 		//if ($stmt->execute(['Sensor_Log', 'Sensor_ID', 'Sensor_Timestamp', 'Last_Sensor_Data', $sensorid2, 'now()', $value2]))
 		// $stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
-///////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
 		if($deviceFunctie == "actuator") 
 		{
 
@@ -174,11 +176,58 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 
 
 	}
-	else
-	{
-	echo 'unknown function of device';
-	}
-}	
+		else
+		{
+		echo 'unknown function of device';
+		}
+	}	
+	
+if (isset($_POST['sensorpage']))
+{
 	
 
+$stmt = $con_db->prepare("Select Sensor_type from Sensor where Sensor_active = '1';");
+// Next fire the sql statmend at the db with the first device.
+$stmt->execute();
+//store the results in the form of an string in result and filter only the first colum out
+$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+for($i = 0; $i < ($stmt->rowCount()); $i++)
+{
+	
+	if (($_POST['sensor']) == ($result[$i]))
+	{
+		
+		$configuratie = $i;
+		$Sensor_Type = ($result[$i]);
+		$Device = strtoupper ($_COOKIE['Device1']);
+			
+			$stmt = $con_db->prepare("Update Sensor SET Device_Device_ID = '$Device' where Sensor_Type = '$Sensor_Type';");
+			if ($stmt->execute())
+			{
+				$stmt = $con_db->prepare("UPDATE Device SET Configuratie_ID = '$configuratie' WHERE Device_ID = '$Device';");
+				if ($stmt->execute())
+				{
+					echo('done');
+				}
+			}
+			else	
+			{
+				echo 'Database update Error ';
+			}
+	}
+	
+	
+
+}
+			
+	// switch (($_GET['Message']))
+		// {
+			// case 'sensor0':
+				// $configuratie = 0
+			// break;
+		// }
+}
+// echo($_COOKIE['Device1']);
+// echo($_COOKIE['Device2']);	
 ?>
