@@ -7,6 +7,16 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+<script>
+function(){
+if (!$("input[name='sensor']").is(':checked')) {
+   alert('Nothing is checked!');
+}
+else {
+   alert('One of the radio buttons is checked!');
+}
+}
+</script>
     <nav class="navbar navbar-inverse">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -31,6 +41,14 @@
     </nav>
 	   <div class="container">
         <div class="row">
+<?php
+if(isset($_COOKIE['Sensor_Type']))
+{
+	$Sensor_Selected = ($_COOKIE['Sensor_Type']);
+	$device = ($_COOKIE['Device1']);
+	echo("<h1><center>Currently selected for device $device: $Sensor_Selected</h1>");
+}
+?>
 		<form method="post" action="api.php">
 		<div class="form-group form-center text-center">
 		<br><br><br><br><br><br><br><br>
@@ -38,7 +56,7 @@
 		<p>
 		
 		
-		<?php
+<?php
           require_once('config.php');
           require_once('database.php');
 
@@ -65,10 +83,10 @@
 				
 
             }
-			
+		
 
-        ?>
-		<input type="text" name="sensorpage" value="1" style="visibility:hidden;" />
+?>
+		<input type="text" name="sensorpage" value="1" style="visibility:hidden;" onsubmit="function()"/>
 		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg">Submit</button>
 		</form>
 		</div>

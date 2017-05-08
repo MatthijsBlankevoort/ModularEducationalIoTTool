@@ -29,9 +29,24 @@
             </div>
         </div>
     </nav>
-    <div class="container">
+	   <div class="container">
         <div class="row">
-            <?php
+<?php
+if(isset($_COOKIE['Actuator_Type']))
+{
+	$Actuator_Selected = ($_COOKIE['Actuator_Type']);
+	$device = ($_COOKIE['Device2']);
+	echo("<h1><center>Currently selected for device $device: $Actuator_Selected</h1>");
+}
+?>
+		<form method="post" action="api.php">
+		<div class="form-group form-center text-center">
+		<br><br><br><br><br><br><br><br>
+		<label for="Device1">Actuator Device:</label>
+		<p>
+		
+		
+<?php
             require_once('config.php');
             require_once('database.php');
 
@@ -40,15 +55,28 @@
             // Next fire the sql statmend at the db with the first device.
             $stmt->execute();
             //store the results in the form of an string in result and filter only the first colum out
-            $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-            echo('<br><br><br><br><br><br><br><br>');
-            for ($i = 0; $i < ($stmt->rowCount()); $i++) {
-                echo $result[$i];
-                echo('<br>');
+            $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);         
+		
+		
+            for($i = 0; $i < ($stmt->rowCount()); $i++)
+            {
+				
+				echo('<input type="radio" name=actuator');
+				
+				echo(" value=");
+				
+				echo($result[$i]);
+				echo('>');
+				echo($result[$i]);
+				echo('<p>');
+				
 
             }
-            ?>
-        </div>
+?>
+		<input type="text" name="actuatorpage" value="1" style="visibility:hidden;" />
+		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg">Submit</button>
+		</form>
+		</div>
     </div>
 </body>
 </html>

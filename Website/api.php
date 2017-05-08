@@ -120,9 +120,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 				{
 					if ($stmt->rowCount() > 0)
 					{				
-					//Todo: Haal threshold uit Database op basis van ID, en functie ?
-					$threshold = 11; 
-					// echo $threshold;
+
 
 					$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' 
 											and Sensor.Sensor_ID = '$sensorId' and Device_Device_ID = '$deviceID' 
@@ -254,7 +252,50 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 				$stmt = $con_db->prepare("UPDATE Device SET Configuratie_ID = '$configuratie' WHERE Device_ID = '$Device';");
 				if ($stmt->execute())
 				{
-					echo('done');
+					echo('Done Update');
+					header("Location: SensorPage.php"); 
+					setcookie('Sensor_Type', $Sensor_Type, time()+60*60*24);
+				}
+			}
+			else	
+			{
+				echo 'Database update Error ';
+			}
+	}
+	
+	
+
+}
+}
+
+if (isset($_POST['actuatorpage']))
+{
+
+$stmt = $con_db->prepare("select Actuator_Type from Actuator where Actuator_active = '1';");
+// Next fire the sql statmend at the db with the first device.
+$stmt->execute();
+//store the results in the form of an string in result and filter only the first colum out
+$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+for($i = 0; $i < ($stmt->rowCount()); $i++)
+{
+	
+	if (($_POST['actuator']) == ($result[$i]))
+	{
+		
+		$configuratie = $i;
+		$Actuator_Type = ($result[$i]);
+		$Device = strtoupper ($_COOKIE['Device2']);
+			
+			$stmt = $con_db->prepare("Update Actuator SET Device_Device_ID = '$Device' where Actuator_Type = '$Actuator_Type';");
+			if ($stmt->execute())
+			{
+				$stmt = $con_db->prepare("UPDATE Device SET Configuratie_ID = '$configuratie' WHERE Device_ID = '$Device';");
+				if ($stmt->execute())
+				{
+					echo('Done Update');
+					header("Location: ActuatorPage.php"); 
+					setcookie('Actuator_Type', $Actuator_Type, time()+60*60*24);
 				}
 			}
 			else	
@@ -274,6 +315,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 			// break;
 		// }
 }
+
 // echo($_COOKIE['Device1']);
 // echo($_COOKIE['Device2']);	
 ?>

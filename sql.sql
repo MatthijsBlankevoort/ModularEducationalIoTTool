@@ -1,6 +1,6 @@
 select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
 SET SQL_SAFE_UPDATES = 0;
-SELECT (MIN(Sensor_Timestamp),) FROM (Sensor_Log)  where Sensor_ID = 001;
+SELECT (MIN(Sensor_Timestamp)) FROM (Sensor_Log)  where Sensor_ID = 001;
 
 DELETE FROM Sensor_Log WHERE Sensor_ID = 002;
 
