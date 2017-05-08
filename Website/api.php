@@ -2,7 +2,7 @@
 /////////////////////////////////////////////////////
 //Get the php files loaded before doing snizzel
   require_once('config.php');
-  require_once('Database.php');
+  require_once('database.php');
 /////////////////////////////////////////////////////
 
   
@@ -162,7 +162,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 					}
 					else
 					{
-						echo('No results Fount that match sensor and Device in Database');
+						echo('No results Found that match sensor and Device in Database');
 					}	
 						
 						
@@ -176,34 +176,66 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 			elseif($deviceFunctie == "actuator") 
 			{
 
-			//Todo: Haal configuratie uit Database op basis van ID, en functie
-			//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
-			$stmt = $con_db->prepare("select Last_Sensor_Data from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' and Sensor.Sensor_ID = '$sensorId' and Device_Device_ID = '$deviceID' 
-									  order by Sensor_Timestamp Limit 1");	
-			$stmt->execute();
-			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-			$SensorValue = $result['0'];
-			$stmt = $con_db->prepare("Select Configuratie_ID from Device where Device_ID = '$deviceID'; ");
-				if ($stmt->execute())
+			$stmt = $con_db->prepare("SELECT Actuator_ID, Device_Device_ID from Actuator where Actuator_ID = '$sensorId' and Device_Device_ID = '$deviceID'");
+				if($stmt->execute())
+					
 				{
+					if ($stmt->rowCount() > 0)
+					{
+					//Todo: Haal configuratie uit Database op basis van ID, en functie
+					//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
+					$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' 
+											and Sensor.Sensor_ID = '$sensorId' 
+											order by Sensor_Timestamp Limit 1");	
+					$stmt->execute();
 					$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-					$configuratie = ($result['0']);
-				}
+					$SensorValue = $result['0'];
+					
+					$stmt = $con_db->prepare("Select Configuratie_ID from Device where Device_ID = '$deviceID'; ");
+						if ($stmt->execute())
+						{
+							$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+							$configuratie = ($result['0']);
+						}
+						else
+						{
+							echo 'No Configuratie_ID from Database call';
+						}
+						$stmt = $con_db->prepare("select Threshold from Actuator where Actuator_ID = '$sensorId'");
+							if ($stmt->execute())
+							{
+								$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+								$Threshold = ($result['0']);
+							}
+							else
+							{
+								echo 'No Threshold value from Database call';
+							}
+						
+						$response = $configuratie . ',' . $SensorValue . ',' .$Threshold;
+						echo $response;
+						// echo $configuratie
+						// echo $result['0'];
+							// $value = 60;
+							// $response = $configuratie . ',' . $dc['value'];
+							// echo ($configuratie);
+							// echo (",");
+							// echo ($value);
+					
+
+					}
+					else
+					{
+						echo('No results Found that match Actuator and Device in Database');
+					}	
+						
+						
+				}	
 				else
 				{
-					echo 'No Configuratie_ID from Database call';
+					echo('Unable to Execute search for matching device and actuator');
 				}
-			
-				$response = $configuratie . ',' . $SensorValue;
-				echo $response;
-				// echo $configuratie
-				// echo $result['0'];
-					// $value = 60;
-					// $response = $configuratie . ',' . $dc['value'];
-					// echo ($configuratie);
-					// echo (",");
-					// echo ($value);
-					
+				
 			}
 			else
 			{
