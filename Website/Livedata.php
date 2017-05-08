@@ -9,10 +9,10 @@
 <body>
 
 	<div id="chart"></div>
-	<!-- <script type="text/javascript" src="livedata.js"></script> -->
-
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
 <?php 
-
 	require_once('config.php');
 	require_once('database.php');
   
@@ -26,35 +26,44 @@
     // Next fire the sql statmend at the db with the first device.
     $stmt->execute();
     $startTimestamp = $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
-
-	$stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '001' ORDER BY Sensor_Timestamp DESC limit 1;");
-	$stmt->execute();
-	$sensorValue = $stmt->fetch(PDO::FETCH_COLUMN, 0);
-
-        $stmt = $con_db->prepare("select Sensor_Timestamp from Sensor_Log where Sensor_ID = '001' ORDER BY Sensor_Timestamp DESC limit 1;");
-    $stmt->execute();
-    $timestamp = $stmt->fetch(PDO::FETCH_COLUMN, 0);
-
-
-
 ?>
-<!-- 
-<script type="text/javascript">
-
-	console.log(testarray);
-</script> -->
 
 <script type="text/javascript">
+    var lastSensorData;
+   
+        function callMe()
+        {
+            $.ajax({
+                   type: "POST",
+                   url: "Sensordata.php",
+                   data: "{}",
+                   success: function(data){
+                        
+                        var sensorData = data;
+                        console.log(data);
+                            chart.flow({
+                                columns: [
+                                    // ['x', 1],
+                                    ['test', sensorData],
+                                ],
+                                duration: 2000,
+                            });
+                            
+             }
+           });
+        }
 
-	
-    console.log(<?php echo json_encode($startTimestamp);?>);
+    // Call it
+    setInterval(callMe, 2500); //every 5 secs
+
+
 	var chart = c3.generate({
     data: {
         x: 'x',
         xFormat: '%Y-%m-%d %H:%M:%S', 
         columns: [
             ['x', <?php echo json_encode($startTimestamp); ?>[3], <?php echo json_encode($startTimestamp); ?>[2], <?php echo json_encode($startTimestamp); ?>[1], <?php echo json_encode($startTimestamp); ?>[0]],
-            ['test', <?php echo json_encode($startSensorValue); ?>[0], <?php echo json_encode($startSensorValue); ?>[1], <?php echo json_encode($startSensorValue); ?>[2], <?php echo json_encode($startSensorValue); ?>[3]],
+            ['test', <?php echo json_encode($startSensorValue); ?>[3], <?php echo json_encode($startSensorValue); ?>[2], <?php echo json_encode($startSensorValue); ?>[1], <?php echo json_encode($startSensorValue); ?>[0]],
         ]
     },
     axis: {
@@ -67,23 +76,8 @@
     },
 
 
-})
-;
+});
 
-
-// console.log(<?php echo json_encode($timestamp)?>);
-setInterval(function () {
-var timestamp = <?php echo json_encode($timestamp)?>;
-
-    chart.flow({
-        columns: [
-            ['x', timestamp],
-            ['test', <?php echo json_encode($sensorValue); ?>],
-        ],
-        duration: 1000,
-    });
-     timestamp = timestamp + 1000;
-}, 2000);
 
 </script>
 
