@@ -45,8 +45,8 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 	elseif ((($result1->Device_id) == ($Device1)) && (($result2->Device_id) == ($Device2)))
 		{
 			header("Location: Dashboard.html"); 
-			setcookie('Device1', $_GET['Device1'], time()+60*60*24);
-            setcookie('Device2', $_GET['Device2'], time()+60*60*24);
+			setcookie('Device1', $Device1, time()+60*60*24);
+            setcookie('Device2', $Device2, time()+60*60*24);
 			exit;
 		}
 	 else
