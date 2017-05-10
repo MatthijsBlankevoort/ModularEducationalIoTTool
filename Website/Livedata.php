@@ -40,9 +40,8 @@
                         
                         var sensorData = data;
                             chart.flow({
-                                columns: [
-                                    // ['x', 1],
-                                    ['test', sensorData],
+                                columns: [  
+                                    ['Sensor Value', sensorData],
                                 ],
                                 duration: 2000,
                             });
@@ -61,7 +60,7 @@
         xFormat: '%Y-%m-%d %H:%M:%S', 
         columns: [
             ['x', <?php echo json_encode($startTimestamp); ?>[3], <?php echo json_encode($startTimestamp); ?>[2], <?php echo json_encode($startTimestamp); ?>[1], <?php echo json_encode($startTimestamp); ?>[0]],
-            ['test', <?php echo json_encode($startSensorValue); ?>[3], <?php echo json_encode($startSensorValue); ?>[2], <?php echo json_encode($startSensorValue); ?>[1], <?php echo json_encode($startSensorValue); ?>[0]],
+            ['Sensor Value', <?php echo json_encode($startSensorValue); ?>[3], <?php echo json_encode($startSensorValue); ?>[2], <?php echo json_encode($startSensorValue); ?>[1], <?php echo json_encode($startSensorValue); ?>[0]],
         ]
     },
     axis: {
