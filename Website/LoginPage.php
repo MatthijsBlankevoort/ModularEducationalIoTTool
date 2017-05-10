@@ -14,6 +14,14 @@
 
 		
 <?php
+
+// if (isset($_COOKIE['Device1']) && isset($_COOKIE['Device2']))
+// {
+	// header("Location: "api.php?Device1='$_COOKIE['Device1']'&Device2='$_COOKIE['Device2']'); 
+	// header("Location: ");
+// header("Location: SensorPage.php");  	
+// }
+
 if (isset($_GET['Message'])) 
 	{
 		switch (($_GET['Message']))

@@ -39,7 +39,7 @@ if(isset($_COOKIE['Actuator_Type']))
 	echo("<h1><center>Currently selected for device $device: $Actuator_Selected</h1>");
 }
 ?>
-		<form method="post" action="api.php">
+		<form method="GET" action="api.php">
 		<div class="form-group form-center text-center">
 		<br><br><br><br><br><br><br><br>
 		<label for="Device1">Actuator Device:</label>
@@ -51,7 +51,7 @@ if(isset($_COOKIE['Actuator_Type']))
             require_once('database.php');
 
 
-            $stmt = $con_db->prepare("select Actuator_Type from Actuator where Actuator_active = '1';");
+            $stmt = $con_db->prepare("select Actuator_Type from Actuator where Actuator_active = '0';");
             // Next fire the sql statmend at the db with the first device.
             $stmt->execute();
             //store the results in the form of an string in result and filter only the first colum out
