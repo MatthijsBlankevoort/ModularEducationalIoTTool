@@ -11,7 +11,8 @@
 	<i class="fa fa-link fa-20x" aria-hidden="true"></i>
 	<div>
 		<form method="get" action="api.php">
-	
+
+		
 <?php
 if (isset($_GET['Message'])) 
 	{
@@ -77,7 +78,9 @@ if (isset($_GET['Message']))
 			</div>
 			<button type="submit" class="btn btn-block btn-primary btn-lg">Connect</button>
 		</form>
-		
+	
+	<br>
+	<div>Méh. Wij gebruiken cookies. Logisch want anders doet de site het niet. Deze melding moet van de overheid. Dat zijn die lui die je nooit netjes bedanken voor die 21% btw </div>
 	</div>
 
 	</div>
