@@ -8,6 +8,12 @@
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script type="text/javascript" src="Dashboard.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet">
     <title>Home Page</title>
 </head>
 <body>
@@ -36,52 +42,29 @@
 
     <div class="container">
         <div class="row">
-            <div id="sensorDevice" class="col-lg-offset-1 col-lg-4 col-md-4 col-sm-4">
-                <div class="row">
-                    <div class="col-lg-12">
+                <div class="col-xs-12 col-md-6 btn-align-center mouseovertest" >
                         <a href="SensorPage.php">
-                            <button class="btn btn-lg btn btn-primary" type="button">Sensor Device</button>
+                            <button class="btn btn-success mybtn-lg button1" type="button" id="test">
+                            <i class="fa fa-bullseye fa-10x" aria-hidden="true"></i><span class="invisible">Sensor</span><hr><span class="test">Sensor</span></button>
                         </a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="imagebox"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="clearfix visible-sm-inline-block"></div>
-            <div id="buttons" class="col-lg-2 col-md-4 col-sm-4">
-                <div class="row">
-                    <div class="col-lg-12 col-xs-12">
-                        <a href="VisualizationPage.html">
-                            <button class="btn btn-lg btn btn-primary" type="button">Visualization</button>
-                        </a>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <a href="ConfigurationPage.html">
-                            <button class="btn btn-lg btn btn-primary" type="button">Configuration</button>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div id="actuatorDevice" class="col-lg-4 col-md-4 col-sm-4">
-                <div class="row">
-                    <div class="col-lg-12 col-xs-12">
+                    </div>   
+                    <div class="col-xs-12 col-md-6 btn-align-center mouseovertest">
                         <a href="ActuatorPage.php">
-                            <button class="btn btn-lg btn btn-primary" type="button">Actuator Device</button>
+                            <button class="btn mybtn-lg btn-success button2" type="button"><i class="fa fa-lightbulb-o fa-10x" aria-hidden="true"></i><span class="invisible">Actuator</span><hr><span class="test">Actuator</span></button>
                         </a>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="imagebox"></div>
+                    
+                    <div class="col-xs-12 col-md-6 btn-align-center mouseovertest">
+                        <a href="VisualizationPage.html">
+                            <button class="btn mybtn-lg btn-success button3" type="button"><i class="fa fa-line-chart fa-10x" aria-hidden="true"></i><span class="invisible">Visualization</span><hr><span  class="test">Visualization</span></button>
+                        </a>
                     </div>
-                </div>
-            </div>
-        </div>
+                    <div class="col-xs-12 col-md-6 btn-align-center mouseovertest">
+                        <a href="ConfigurationPage.html">
+                            <button class="btn mybtn-lg btn-success button4" type="button"><i class="fa fa-cogs fa-10x" aria-hidden="true"></i><span class="invisible">Configuration</span><hr><span class="test">Configuration</span></button>
+                        </a>
+                    </div>
+            </div> 
     </div>
 </body>
 </html>

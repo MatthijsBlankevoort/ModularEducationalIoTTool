@@ -5,6 +5,11 @@
     margin-top: 10%;
 }
 
+body{
+    font-family: "Oleo Script";
+    font-size:20px;
+}
+
 #buttons {
     display: flex;
     align-items: center;
@@ -18,7 +23,6 @@
     flex-flow: column;
     margin-top: 10%;
 }
-
     
 
 .box{
@@ -47,9 +51,9 @@ input{
     margin-bottom: .4em;    
 }
 
-button {
-
-    text-transform: uppercase;
+button span{
+    font-family: "Oleo Script";
+    font-size: 40px;
 }
 
 .fa-20x{
@@ -59,6 +63,17 @@ button {
     text-shadow: 0 5px 12.5px black;
 }
 
+.fa-10x{
+    font-size: 10em;
+    text-align: center;
+    line-height: 50%;
+}
+
+.mybtn-lg{
+
+    width: 250px;
+    height: 250px;
+}
 i{
     margin-top: 0.3em;
 }
@@ -94,3 +109,23 @@ i{
     border-radius: 5px;
     background-color: #761c19;
 }
+
+.btn-align-center{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: row;
+}
+
+.invisible{
+    display: none;
+}
+
+.test{
+    font-size: 20px;
+}
+
+.btn{
+    border:2px solid darkgreen;
+}
+
