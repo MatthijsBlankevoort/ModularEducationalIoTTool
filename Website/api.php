@@ -68,12 +68,12 @@ if(isset($_GET['logout']))
 	if (isset($_COOKIE['Sensor_ID']))
 	{
 		$Sensor_IDtoupdate = ($_COOKIE['Sensor_ID']);
-		$stmt = $con_db->prepare("Update Sensor SET Sensor_active = '0' where Sensor_ID = '$Sensor_IDtoupdate';");
+		$stmt = $con_db->prepare("Update Sensor SET Sensor_active = '0', Device_Device_ID = 'Standby' where Sensor_ID = '$Sensor_IDtoupdate';");
 	}
 	if (isset($_COOKIE['Actuator_ID']))
 	{
 		$Actuator_IDtoupdate = ($_COOKIE['Actuator_ID']);
-		$stmt = $con_db->prepare("Update Actuator SET Actuator_active = '0' where Actuator_ID = '$Actuator_IDtoupdate';");
+		$stmt = $con_db->prepare("Update Actuator SET Actuator_active = '0', Device_Device_ID = 'Standby' where Actuator_ID = '$Actuator_IDtoupdate';");
 	}
 	
 	
@@ -193,7 +193,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 			elseif($deviceFunctie == "actuator") 
 			{
 
-			$stmt = $con_db->prepare("SELECT Actuator_ID, Device_Device_ID from Actuator where Actuator_ID = '$sensorId' and Device_Device_ID = '$deviceID'");
+			$stmt = $con_db->prepare("SELECT Sensor_ID from Sensor where sensor_ID = '$sensorId'");
 				if($stmt->execute())
 					
 				{
@@ -218,7 +218,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 						{
 							echo 'No Configuratie_ID from Database call';
 						}
-						$stmt = $con_db->prepare("select Threshold from Actuator where Actuator_ID = '$sensorId'");
+						$stmt = $con_db->prepare("select Threshold from Actuator where Device_Device_ID = '$deviceID'");
 							if ($stmt->execute())
 							{
 								$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
@@ -321,7 +321,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 		else
 		{
 			
-			$stmt = $con_db->prepare("Update Sensor SET Device_Device_ID = '$Device', Sensor_active = '1' where Sensor_Type = '$Sensor_Type'; and Sensor_ID = $Sensor_ID");
+			$stmt = $con_db->prepare("Update Sensor SET Device_Device_ID = '$Device', Sensor_active = '1' where Sensor_Type = '$Sensor_Type' and Sensor_ID = $Sensor_ID");
 			if ($stmt->execute())
 			{
 				
@@ -331,7 +331,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 					if (isset($_COOKIE['Sensor_ID']))
 					{
 						$Sensor_IDtoupdate = ($_COOKIE['Sensor_ID']);
-						$stmt = $con_db->prepare("Update Sensor SET Sensor_active = '0' where Sensor_ID = '$Sensor_IDtoupdate';");
+						$stmt = $con_db->prepare("Update Sensor SET Sensor_active = '0', Device_Device_ID = 'Standby' where Sensor_ID = '$Sensor_IDtoupdate';");
 						if($stmt->execute())
 						{
 							header("Location: SensorPage.php"); 
@@ -407,7 +407,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 					if (isset($_COOKIE['Actuator_ID']))
 					{
 						$Actuator_IDtoupdate = ($_COOKIE['Actuator_ID']);
-						$stmt = $con_db->prepare("Update Actuator SET Actuator_active = '0' where Actuator_ID = '$Actuator_IDtoupdate';");
+						$stmt = $con_db->prepare("Update Actuator SET Actuator_active = '0', Device_Device_ID = 'Standby' where Actuator_ID = '$Actuator_IDtoupdate';");
 						if($stmt->execute())
 						{
 							header("Location: ActuatorPage.php"); 
