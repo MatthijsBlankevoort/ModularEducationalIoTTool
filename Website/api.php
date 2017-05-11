@@ -44,9 +44,47 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 		}
 	elseif ((($result1->Device_id) == ($Device1)) && (($result2->Device_id) == ($Device2)))
 		{
-			header("Location: Dashboard.html"); 
-			setcookie('Device1', $Device1, time()+60*60*24);
-            setcookie('Device2', $Device2, time()+60*60*24);
+			// header("Location: Dashboard.html"); 
+
+			
+			$stmt = $con_db->prepare("SELECT Device1,Device2 FROM DeviceLink where Device1 = '$Device1'");
+			if($stmt->execute())
+			{
+				$result0 = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+				// $stmt = $con_db->prepare("SELECT Device1,Device2 FROM DeviceLink where Device2 = '$Device2'");
+				// $stmt->execute();
+				// $result1 = $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
+				if((isset($result0[0])) && ($result0[0] == $Device1))
+				{
+					echo('Device 1 Already Linkt to device ');
+					exit;
+				}
+				// elseif((isset($result1[0])) && ($result1[0] != $Device1))
+				// {
+					// echo('Device 2 Already Linkt to device ');
+					// exit;
+				// }
+				else
+				{
+					$stmt = $con_db->prepare("insert into DeviceLink (Device1, Device2) value ('$Device1','$Device2')");
+					if($stmt->execute())
+					{
+						header("Location: Dashboard.html");
+						setcookie('Device1', $Device1, time()+60*60*24);
+						setcookie('Device2', $Device2, time()+60*60*24);
+						echo('New link created');
+						exit;
+					}
+					else
+					{
+						header("Location: Dashboard.html");
+					}
+				}
+			}
+			else
+			{
+				echo('No Connection to Database or Select Failt');
+			}
 			exit;
 		}
 	 else
@@ -69,13 +107,21 @@ if(isset($_GET['logout']))
 	{
 		$Sensor_IDtoupdate = ($_COOKIE['Sensor_ID']);
 		$stmt = $con_db->prepare("Update Sensor SET Sensor_active = '0', Device_Device_ID = 'Standby' where Sensor_ID = '$Sensor_IDtoupdate';");
+		$stmt->execute();
 	}
 	if (isset($_COOKIE['Actuator_ID']))
 	{
 		$Actuator_IDtoupdate = ($_COOKIE['Actuator_ID']);
 		$stmt = $con_db->prepare("Update Actuator SET Actuator_active = '0', Device_Device_ID = 'Standby' where Actuator_ID = '$Actuator_IDtoupdate';");
+		$stmt->execute();
 	}
-	
+	if ((isset($_COOKIE['Device1']))&&(isset($_COOKIE['Device2'])))
+	{
+		$Device1 = ($_COOKIE['Device1']);
+		$Device2 = ($_COOKIE['Device2']);
+		$stmt = $con_db->prepare("DELETE FROM DeviceLink WHERE Device1='$Device1' and Device2='$Device2';");
+		$stmt->execute();
+	}
 	
 	$past = time() - 3600;
 	foreach ( $_COOKIE as $key => $value )
@@ -192,21 +238,26 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 			///////////////////////////////////////////////////////////////////////////////////////////////////////
 			elseif($deviceFunctie == "actuator") 
 			{
-
-			$stmt = $con_db->prepare("SELECT Sensor_ID from Sensor where sensor_ID = '$sensorId'");
+			$stmt = $con_db->prepare("select Device1,Device2 from DeviceLink where Device2 = '$deviceID';");
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+			$Device1 = $result[0];
+			$stmt = $con_db->prepare("SELECT Actuator_ID, Device_Device_ID from Actuator where Actuator_ID = '$sensorId' and Device_Device_ID = '$deviceID'");
 				if($stmt->execute())
-					
 				{
 					if ($stmt->rowCount() > 0)
 					{
-					//Todo: Haal configuratie uit Database op basis van ID, en functie
+					$stmt = $con_db->prepare("Select Sensor_ID from Sensor where Device_Device_ID = '$Device1'");
+					$stmt->execute();
+					$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+					$Sensor_ID = ($result[0]);
 					//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
-					$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' 
-											and Sensor.Sensor_ID = '$sensorId' 
+					$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$Sensor_ID' 
+											and Sensor.Sensor_ID = '$Sensor_ID' 
 											order by Sensor_Timestamp Limit 1");	
 					$stmt->execute();
 					$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-					$SensorValue = $result['0'];
+					$SensorValue = $result[0];
 					
 					$stmt = $con_db->prepare("Select Configuratie_ID from Device where Device_ID = '$deviceID'; ");
 						if ($stmt->execute())
@@ -218,18 +269,11 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 						{
 							echo 'No Configuratie_ID from Database call';
 						}
-						$stmt = $con_db->prepare("select Threshold from Actuator where Device_Device_ID = '$deviceID'");
+						$stmt = $con_db->prepare("select Threshold from Actuator where Actuator_ID = '$sensorId'");
 							if ($stmt->execute())
 							{
-								if ($stmt->rowCount() < 1)
-								{
-									echo('No Device that matches actuator. Unable to get Threshold');
-								}
-								else
-								{
-									$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-									$Threshold = ($result['0']);
-								}
+								$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+								$Threshold = ($result['0']);
 							}
 							else
 							{
