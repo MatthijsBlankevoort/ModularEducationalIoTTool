@@ -33,7 +33,7 @@ else {
                     <li><a href="Dashboard.html">Dashboard</a></li>
                     <li class="active"><a href="SensorPage.php">Sensors</a></li>
                     <li><a href="ActuatorPage.php">Actuators</a></li>
-                    <li><a href="VisualizationPage.php">Visualizations</a></li>
+                    <li><a href="VisualizationPage.html">Visualizations</a></li>
                     <li><a href="ConfigurationPage.html">Configurations</a></li>
                 </ul>
             </div>
@@ -61,7 +61,7 @@ if(isset($_COOKIE['Sensor_Type']))
           require_once('database.php');
 
 
-            $stmt = $con_db->prepare("Select Sensor_type from Sensor where Sensor_active = '0';");
+            $stmt = $con_db->prepare("Select DISTINCT Sensor_type from Sensor where Sensor_active = '0' order by Sensor_Type;");
             // Next fire the sql statmend at the db with the first device.
             $stmt->execute();
             //store the results in the form of an string in result and filter only the first colum out

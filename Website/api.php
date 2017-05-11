@@ -242,10 +242,6 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 				echo('Unknown Function');
 			}
 
-					
-
-
-
 		}
 		else
 		{
@@ -275,15 +271,28 @@ $result1 = $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
 // print_r($result1);
 for($i = 0; $i < ($stmt->rowCount()); $i++)
 {
+	
 	// echo($result0[$i]);
 	// echo($_GET['sensor']);
 	if (($_GET['sensor']) == ($result0[$i]))
 	{
 		
-		$configuratie = $i;
 		$Sensor_Type = ($result0[$i]);
 		$Sensor_ID = ($result1[$i]);
 		$Device = strtoupper ($_COOKIE['Device1']);
+		$stmt = $con_db->prepare("select DISTINCT Sensor_Type from Sensor");
+		$stmt->execute();
+		$DISTINCT = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+		// print_r($DISTINCT);
+		for($i = 0; $i < ($stmt->rowCount()); $i++)
+		{
+			// echo('test');
+			// echo($i);
+			if ($DISTINCT[$i] == $Sensor_Type)
+			{
+				$configuratie = $i + 1;
+			}
+		}
 		// echo($configuratie);
 		// echo($Sensor_Type);
 		// echo($Sensor_ID);
@@ -348,10 +357,22 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 	// echo("actuator");
 	if (($_GET['actuator']) == ($result0[$i]))
 	{
-		$configuratie = $i;
 		$Actuator_Type = ($result0[$i]);
 		$Actuator_ID = ($result1[$i]);
 		$Device = strtoupper ($_COOKIE['Device2']);
+		$stmt = $con_db->prepare("select DISTINCT Actuator_Type from Actuator");
+		$stmt->execute();
+		$DISTINCT = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+		// print_r($DISTINCT);
+		for($i = 0; $i < ($stmt->rowCount()); $i++)
+		{
+			// echo('test');
+			// echo($i);
+			if ($DISTINCT[$i] == $Sensor_Type)
+			{
+				$configuratie = $i + 1;
+			}
+		}
 		if ((isset($_COOKIE['Actuator_Type'])) && ($_COOKIE['Actuator_Type'] == $Actuator_Type))
 		{
 				header("Location: ActuatorPage.php"); 
