@@ -385,7 +385,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 		{
 			// echo('test');
 			// echo($i);
-			if ($DISTINCT[$i] == $Sensor_Type)
+			if ($DISTINCT[$i] == $Actuator_Type)
 			{
 				$configuratie = $i + 1;
 			}
@@ -433,15 +433,5 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 	
 
 }
-			
-	// switch (($_GET['Message']))
-		// {
-			// case 'sensor0':
-				// $configuratie = 0
-			// break;
-		// }
 }
-
-// echo($_COOKIE['Device1']);
-// echo($_COOKIE['Device2']);	
 ?>
