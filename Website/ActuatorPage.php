@@ -23,7 +23,7 @@
                     <li><a href="Dashboard.html">Dashboard</a></li>
                     <li><a href="SensorPage.php">Sensors</a></li>
                     <li class="active"><a href="ActuatorPage.php">Actuators</a></li>
-                    <li><a href="VisualizationPage.php">Visualizations</a></li>
+                    <li><a href="VisualizationPage.html">Visualizations</a></li>
                     <li><a href="ConfigurationPage.html">Configurations</a></li>
                 </ul>
             </div>
@@ -51,7 +51,7 @@ if(isset($_COOKIE['Actuator_Type']))
             require_once('database.php');
 
 
-            $stmt = $con_db->prepare("select Actuator_Type from Actuator where Actuator_active = '0';");
+            $stmt = $con_db->prepare("select DISTINCT Actuator_Type from Actuator where Actuator_active = '0' order by Actuator_Type;");
             // Next fire the sql statmend at the db with the first device.
             $stmt->execute();
             //store the results in the form of an string in result and filter only the first colum out
