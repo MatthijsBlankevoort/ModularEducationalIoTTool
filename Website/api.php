@@ -270,9 +270,13 @@ $result0 = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 // Next fire the sql statmend at the db with the first device.
 $stmt->execute();
 $result1 = $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
+// echo('hoi');
+// print_r($result0);
+// print_r($result1);
 for($i = 0; $i < ($stmt->rowCount()); $i++)
 {
-	
+	// echo($result0[$i]);
+	// echo($_GET['sensor']);
 	if (($_GET['sensor']) == ($result0[$i]))
 	{
 		
@@ -280,20 +284,38 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 		$Sensor_Type = ($result0[$i]);
 		$Sensor_ID = ($result1[$i]);
 		$Device = strtoupper ($_COOKIE['Device1']);
+		// echo($configuratie);
+		// echo($Sensor_Type);
+		// echo($Sensor_ID);
+		// echo($Device);
+		if ((isset($_COOKIE['Sensor_Type'])) && ($_COOKIE['Sensor_Type'] == $Sensor_Type))
+		{
+				header("Location: SensorPage.php"); 
+		}
+		else
+		{
 			
 			$stmt = $con_db->prepare("Update Sensor SET Device_Device_ID = '$Device', Sensor_active = '1' where Sensor_Type = '$Sensor_Type'; and Sensor_ID = $Sensor_ID");
 			if ($stmt->execute())
 			{
+				
 				$stmt = $con_db->prepare("UPDATE Device SET Configuratie_ID = '$configuratie' WHERE Device_ID = '$Device';");
 				if ($stmt->execute())
 				{
-					if ($_COOKIE['Actuator_Type'] == $Actuator_Type)
+					if (isset($_COOKIE['Sensor_ID']))
 					{
-						header("Location: SensorPage.php"); 
+						$Sensor_IDtoupdate = ($_COOKIE['Sensor_ID']);
+						$stmt = $con_db->prepare("Update Sensor SET Sensor_active = '0' where Sensor_ID = '$Sensor_IDtoupdate';");
+						if($stmt->execute())
+						{
+							header("Location: SensorPage.php"); 
+							setcookie('Sensor_Type', $Sensor_Type, time()+60*60*24);
+							setcookie('Sensor_ID', $Sensor_ID, time()+60*60*24);
+						}
 					}
 					else
 					{
-						header("Location: SensorPage.php"); 
+						header("Location: SensorPage.php");
 						setcookie('Sensor_Type', $Sensor_Type, time()+60*60*24);
 						setcookie('Sensor_ID', $Sensor_ID, time()+60*60*24);
 					}
@@ -303,6 +325,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 			{
 				echo 'Database update Error ';
 			}
+		}
 	}
 	
 	
@@ -329,17 +352,30 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 		$Actuator_Type = ($result0[$i]);
 		$Actuator_ID = ($result1[$i]);
 		$Device = strtoupper ($_COOKIE['Device2']);
+		if ((isset($_COOKIE['Actuator_Type'])) && ($_COOKIE['Actuator_Type'] == $Actuator_Type))
+		{
+				header("Location: ActuatorPage.php"); 
+		}
+		else
+		{
 			
 			$stmt = $con_db->prepare("Update Actuator SET Device_Device_ID = '$Device', Actuator_active = '1' where Actuator_Type = '$Actuator_Type' and Actuator_ID = '$Actuator_ID';");
-			
 			if ($stmt->execute())
 			{
+				
 				$stmt = $con_db->prepare("UPDATE Device SET Configuratie_ID = '$configuratie' WHERE Device_ID = '$Device';");
 				if ($stmt->execute())
 				{
-					if ($_COOKIE['Actuator_Type'] == $Actuator_Type)
+					if (isset($_COOKIE['Actuator_ID']))
 					{
-						header("Location: ActuatorPage.php");
+						$Actuator_IDtoupdate = ($_COOKIE['Actuator_ID']);
+						$stmt = $con_db->prepare("Update Actuator SET Actuator_active = '0' where Actuator_ID = '$Actuator_IDtoupdate';");
+						if($stmt->execute())
+						{
+							header("Location: ActuatorPage.php"); 
+							setcookie('Actuator_Type', $Actuator_Type, time()+60*60*24);
+							setcookie('Actuator_ID', $Actuator_ID, time()+60*60*24);
+						}
 					}
 					else
 					{
@@ -353,6 +389,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 			{
 				echo 'Database update Error ';
 			}
+		}
 	}
 	
 	

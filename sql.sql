@@ -18,7 +18,7 @@ where Sensor_Timestamp=(select min(Sensor_Timestamp)
 from Sensor_Log where Sensor_ID = '002');
 
 UPDATE Sensor_Log
-SET Sensor_ID = '002',Sensor_Timestamp = now(),Last_Sensor_Data = '50'
+SET Sensor_ID = '001',Sensor_Timestamp = now(),Last_Sensor_Data = '80'
 WHERE Sensor_Timestamp=(select min(Sensor_Timestamp) from (select * from Sensor_Log) temp1 where temp1.Sensor_ID = '002');
 
 UPDATE Device
@@ -42,3 +42,12 @@ and Sensor.Sensor_ID = '002' and Device_Device_ID = 'Standby' order by Sensor_Ti
 
 UPDATE Sensor_Log,Sensor SET Sensor_Timestamp = now(),Last_Sensor_Data = '200'
 WHERE Sensor_Timestamp=(select min(Sensor_Timestamp) from (select * from Sensor_Log) temp1 where temp1.Sensor_ID = '002') and Device_Device_ID = 'Standby'
+
+select Actuator_Type, Actuator_ID from Actuator where Actuator_active = '0';
+select Actuator_Type, Actuator_ID from Actuator where Actuator_active = '0';
+Select Sensor_type, Sensor_ID from Sensor where Sensor_active = '0';
+
+select Actuator_Type, Actuator_ID from Actuator where Actuator_active = '0';
+Update Actuator SET Device_Device_ID = 'TEST2', Actuator_active = '0' where Actuator_Type = 'LED' and Actuator_ID = '001';
+
+Update Sensor SET Device_Device_ID = 'TEST1' where Sensor_Type = 'Lichtsensor' and Sensor_ID = '001'
