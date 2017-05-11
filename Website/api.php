@@ -62,11 +62,28 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
         
 	
 
-	// /* Redirect browser */
-		// header("Location: index.php");
-	 
-		// /* Make sure that code below does not get executed when we redirect. */
-		// exit;	
+}
+if(isset($_GET['logout']))
+{
+	if (isset($_COOKIE['Sensor_ID']))
+	{
+		$Sensor_IDtoupdate = ($_COOKIE['Sensor_ID']);
+		$stmt = $con_db->prepare("Update Sensor SET Sensor_active = '0' where Sensor_ID = '$Sensor_IDtoupdate';");
+	}
+	if (isset($_COOKIE['Actuator_ID']))
+	{
+		$Actuator_IDtoupdate = ($_COOKIE['Actuator_ID']);
+		$stmt = $con_db->prepare("Update Actuator SET Actuator_active = '0' where Actuator_ID = '$Actuator_IDtoupdate';");
+	}
+	
+	
+	$past = time() - 3600;
+	foreach ( $_COOKIE as $key => $value )
+	{
+		setcookie( $key, $value, $past, '/' );
+	}
+	
+	header("location: LoginPage.php");
 }
 // Update config set at the website and send to Database
 if(isset($_GET['deviceId']) && isset($_GET['configuratie']))
