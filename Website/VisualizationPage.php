@@ -44,14 +44,16 @@
 <?php 
     require_once('config.php');
     require_once('database.php');
-  
-    $stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '001' ORDER BY Sensor_Timestamp DESC limit 4;");
+
+    $sensor_id = $_COOKIE['Sensor_ID'];
+
+    $stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '$sensor_id' ORDER BY Sensor_Timestamp DESC limit 4;");
     // Next fire the sql statmend at the db with the first device.
     $stmt->execute();
     //store the sensorValues in the form of an string in sensorValue and filter only the first colum out
     $startSensorValue = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-        $stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '001' ORDER BY Sensor_Timestamp DESC limit 4;");
+        $stmt = $con_db->prepare("select * from Sensor_Log where Sensor_ID = '$sensor_id' ORDER BY Sensor_Timestamp DESC limit 4;");
     // Next fire the sql statmend at the db with the first device.
     $stmt->execute();
     $startTimestamp = $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
