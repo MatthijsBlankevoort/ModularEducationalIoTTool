@@ -221,8 +221,15 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 						$stmt = $con_db->prepare("select Threshold from Actuator where Device_Device_ID = '$deviceID'");
 							if ($stmt->execute())
 							{
-								$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-								$Threshold = ($result['0']);
+								if ($stmt->rowCount() < 1)
+								{
+									echo('No Device that matches actuator. Unable to get Threshold');
+								}
+								else
+								{
+									$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+									$Threshold = ($result['0']);
+								}
 							}
 							else
 							{
