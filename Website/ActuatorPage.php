@@ -11,7 +11,7 @@
 
 </head>
 <body>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
                 <a class="navbar-brand" href="Dashboard.html">IoT Workshop</a>
@@ -27,7 +27,7 @@
                     <li><a href="Dashboard.html">Dashboard</a></li>
                     <li><a href="SensorPage.php">Sensors</a></li>
                     <li class="active"><a href="ActuatorPage.php">Actuators</a></li>
-                    <li><a href="VisualizationPage.html">Visualizations</a></li>
+                    <li><a href="VisualizationPage.php">Visualizations</a></li>
                     <li><a href="ConfigurationPage.html">Configurations</a></li>
                 </ul>
             </div>
