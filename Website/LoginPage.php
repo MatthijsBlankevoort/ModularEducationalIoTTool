@@ -61,9 +61,22 @@ if (isset($_GET['Message']))
 
 			case '6':
 				echo '<h2><font color=red><center>';
+				echo 'Device 1 Already set in Database';
+				echo '</h2>';
+			break;
+			
+			case '7':
+				echo '<h2><font color=red><center>';
+				echo 'Device 2 Already set in Databse';
+				echo '</h2>';
+			break;
+			
+			case '8':
+				echo '<h2><font color=red><center>';
 				echo 'unknown error';
 				echo '</h2>';
 			break;
+						
 							
 
 		}
