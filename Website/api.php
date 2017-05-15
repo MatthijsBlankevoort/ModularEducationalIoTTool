@@ -12,6 +12,12 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 {
 	$Device1 = strtoupper ($_GET['Device1']);
 	$Device2 = strtoupper ($_GET['Device2']);
+	if (($Device1 = 'ADMIN') && ($Device2 = 'ADMIN'))
+	{
+		echo('lol');	
+		header("Location: Adminpage.php");
+		exit;
+	}
 	// Go through all options for the selection of devices:
 	// Ask the Database if the device is in there by preparing the statment first
 	$stmt = $con_db->prepare("Select Device_id from Device where Device_ID = ?");
