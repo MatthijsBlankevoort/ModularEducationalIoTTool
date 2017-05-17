@@ -42,7 +42,7 @@
                     <div class="col-md-6 col-xs-12 btn-align-center">
                         <a href="SensorPage.php">
                             <button class="btn btn-primary mybtn-lg button1" type="button" id="test">
-                            <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible"><?php echo en$COOKIE[''];?></span><hr><span class="test">Lichtsensor</span></button>
+                            <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible"><?php echo json_encode(value)$COOKIE[''];?></span><hr><span class="test">Lichtsensor</span></button>
                         </a>
                     </div>
 
