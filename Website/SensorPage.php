@@ -39,7 +39,7 @@ else {
                     <li class="active"><a href="SensorPage.php">Sensors</a></li>
                     <li><a href="ActuatorPage.php">Actuators</a></li>
                     <li><a href="VisualizationPage.php">Visualizations</a></li>
-                    <li><a href="ConfigurationPage.html">Configurations</a></li>
+                    <li><a href="ConfigurationPage.php">Configurations</a></li>
                 </ul>
             </div>
         </div>
