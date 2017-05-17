@@ -12,12 +12,6 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 {
 	$Device1 = strtoupper ($_GET['Device1']);
 	$Device2 = strtoupper ($_GET['Device2']);
-	if (($Device1 = 'ADMIN') && ($Device2 = 'ADMIN'))
-	{
-		echo('lol');	
-		header("Location: Adminpage.php");
-		exit;
-	}
 	// Go through all options for the selection of devices:
 	// Ask the Database if the device is in there by preparing the statment first
 	$stmt = $con_db->prepare("Select Device_id from Device where Device_ID = ?");
@@ -68,19 +62,48 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 			$stmt->execute();
 			$result4 = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 			
-			print_r($result1);
-			print_r($result2);
-			print_r($result3);
-			print_r($result4);
+			// print_r($result1);
+			// print_r($result2);
+			// print_r($result3);
+			// print_r($result4);
 			if ((isset($result1[0])) && (isset($result2[0])))
 			{
 				
 				if ($result1[0] == $Device1 && $result2[0] == $Device2)
 				{
 				echo('hoi');
-				header("Location: Dashboard.html");
 				setcookie('Device1', $Device1, time()+60*60*24);
 				setcookie('Device2', $Device2, time()+60*60*24);
+				if ((!isset($_COOKIE['Sensor_Type'])) || (!isset($_COOKIE['Actuator_Type'])))
+				{
+					$stmt = $con_db->prepare("select Sensor_Type,Sensor_ID from Sensor where Device_Device_ID = '$Device1'");
+					$stmt->execute();
+					$result1 = $stmt->fetchAll();
+					if($stmt->rowCount() > 0) 
+					{
+						$Sensor_Type = ($result1[0][0]);
+						$Sensor_ID = ($result1[0][1]);
+						setcookie('Sensor_Type', $Sensor_Type, time()+60*60*24);
+						setcookie('Sensor_ID', $Sensor_ID, time()+60*60*24);
+					}
+					$stmt = $con_db->prepare("select Actuator_Type,Actuator_ID,Threshold from Actuator where Device_Device_ID = '$Device2'");
+					$stmt->execute();
+					$result2 = $stmt->fetchAll();
+					if($stmt->rowCount() > 0) 
+					{
+						$Actuator_Type = ($result2[0][0]);
+						$Actuator_ID = ($result2[0][1]);
+						$Threshold = ($result2[0][2]);
+
+						setcookie('Actuator_Type', $Actuator_Type, time()+60*60*24);
+						setcookie('Actuator_ID', $Actuator_ID, time()+60*60*24);
+						setcookie('Threshold', $Threshold, time()+60*60*24);
+					}
+
+					header("Location: Dashboard.html");
+				}
+				
+				header("Location: Dashboard.html");
 				exit;
 				}
 				elseif ($result1[0] == $Device2)
@@ -117,9 +140,9 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 				if($stmt->execute())
 				{
 					echo('insert');
-					header("Location: Dashboard.html");
 					setcookie('Device1', $Device1, time()+60*60*24);
 					setcookie('Device2', $Device2, time()+60*60*24);
+					header("Location: Dashboard.html");
 					exit;
 					
 				}
@@ -195,6 +218,47 @@ if(isset($_GET['deviceId']) && isset($_GET['configuratie']))
 }
 //Get variables from sensor NodeMCU
 //Todo make an if() for url of actuator which only sends ID, actuatorID, function
+if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']))
+{
+	$Device = ($_GET['deviceId']);
+	$DeviceFunction = ($_GET['deviceFunctie']);
+	if($DeviceFunction == 'sensor')
+	{
+		$stmt = $con_db->prepare("select Sensor_ID from Sensor where Device_Device_ID = '$Device'");
+		if ($stmt->execute())
+		{
+			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+			if($stmt->rowCount() > 0) 
+			{
+				echo($result[0]);
+			}
+			else
+			{
+				echo('0');
+			}
+		}
+	}
+	elseif($DeviceFunction == 'actuator')
+	{
+		$stmt = $con_db->prepare("select Actuator_ID from Actuator where Device_Device_ID = '$Device'");
+		if ($stmt->execute())
+		{
+			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+			if($stmt->rowCount() > 0) 
+			{
+				echo($result[0]);
+			}
+			else
+			{
+				echo('0');
+			}
+		}
+	}
+	else
+	{
+		echo('Unknown Function');
+	}
+}
 if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sensorId']) && isset($_GET['value']))
 {
 	$deviceID       = ($_GET['deviceId']);
@@ -531,5 +595,27 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 	
 
 }
+}
+if (isset($_GET['Threshold']))
+{
+	if (!isset($_COOKIE['Actuator_ID']))
+	{
+		header("Location: ConfigurationPage.php?Message=1"); // Give error No actuator set
+	}
+	else
+	{
+		$Actuator_ID = ($_COOKIE['Actuator_ID']);
+		$Threshold = ($_GET['Threshold']);
+		$stmt = $con_db-> prepare("update Actuator set Threshold = '$Threshold' where Actuator_ID = '$Actuator_ID';");
+		if ($stmt->execute())
+		{
+				header("Location: ConfigurationPage.php");
+				setcookie('Threshold', $Threshold, time()+60*60*24);
+		}
+		else
+		{
+			echo('Unable to Connect to the Database');
+		}
+	}
 }
 ?>
