@@ -2,14 +2,13 @@
 <html>
 <head>
     <title>Sensor Page</title>
-    <link rel="stylesheet" type="text/css" href="style.css"/>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+    <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css'>
+
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css"/>
-    
-  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-
 </head>
 <body>
 <script>
@@ -22,17 +21,18 @@ else {
 }
 }
 </script>
-    <nav class="navbar navbar-default ">
+    <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="Dashboard.html">IoT Workshop</a>
-            </div>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#myNavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button>
+                </button>
+                <a class="navbar-brand" href="Dashboard.html">IoT Workshop</a>
+            </div>
+            
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li><a href="Dashboard.html">Dashboard</a></li>
@@ -56,41 +56,51 @@ if(isset($_COOKIE['Sensor_Type']))
 ?>
 		<form method="GET" action="api.php" onsubmit="sensor()">
 		<div class="form-group form-center text-center">
-		<br><br><br><br><br><br><br><br>
 		<label for="Device1">Sensor Device:</label>
-		<p>
-		
-		
+
+      <section>
+
 <?php
           require_once('config.php');
           require_once('database.php');
 
 
-            $stmt = $con_db->prepare("Select DISTINCT Sensor_type from Sensor where Sensor_active = '0' order by Sensor_Type;");
+            $stmt = $con_db->prepare("Select Sensor_type from Sensor where Sensor_active = '0';");
             // Next fire the sql statmend at the db with the first device.
             $stmt->execute();
             //store the results in the form of an string in result and filter only the first colum out
             $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-            
-		
-		
+
+
+
             for($i = 0; $i < ($stmt->rowCount()); $i++)
             {
-				
-				echo('<input type="radio" name=sensor');
-				
-				echo(" value=");
-				
-				echo($result[$i]);
-				echo('>');
-				echo($result[$i]);
-				echo('<p>');
-				
 
-            }
-		
+                echo('<div>');
 
+        				echo('<input type="radio" ');
+                echo('id="');
+                echo($result[$i]);
+                echo('"');
+
+                echo(' name=sensor');
+
+        				echo(" value=");
+
+        				echo($result[$i]);
+        				echo('>');
+                echo('<label for="');
+
+        				echo($result[$i]);
+
+                echo('">');
+                echo($result[$i]);
+
+                echo('</div>');
+
+                    }
 ?>
+</section>
 		<input type="text" name="sensorpage" value="1" style="visibility:hidden;"/>
 		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg">Submit</button>
 		</form>

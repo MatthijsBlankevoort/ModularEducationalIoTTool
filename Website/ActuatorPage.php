@@ -5,23 +5,31 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css"/>
-    
-  <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-
+    <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel='stylesheet prefetch' href='http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css'>
 </head>
 <body>
+    <script>
+    function actuator(){
+    if($('#radio_button_id')[0].checked) {
+       alert('Nothing is checked!');
+    }
+    else {
+       alert('One of the radio buttons is checked!');
+    }
+    }
+    </script>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="Dashboard.html">IoT Workshop</a>
-            </div>
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
                     data-target="#myNavbar">
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
-            </button>
+                </button>
+                <a class="navbar-brand" href="Dashboard.html">IoT Workshop</a>
+            </div>
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li><a href="Dashboard.html">Dashboard</a></li>
@@ -43,9 +51,8 @@ if(isset($_COOKIE['Actuator_Type']))
 	echo("<h1><center>Currently selected for device $device: $Actuator_Selected</h1>");
 }
 ?>
-		<form method="GET" action="api.php">
+		<form method="GET" action="api.php" onsubmit="actuator()">
 		<div class="form-group form-center text-center">
-		<br><br><br><br><br><br><br><br>
 		<label for="Device1">Actuator Device:</label>
 		<p>
 		
@@ -55,7 +62,7 @@ if(isset($_COOKIE['Actuator_Type']))
             require_once('database.php');
 
 
-            $stmt = $con_db->prepare("select DISTINCT Actuator_Type from Actuator where Actuator_active = '0' order by Actuator_Type;");
+            $stmt = $con_db->prepare("select Actuator_Type from Actuator where Actuator_active = '0';");
             // Next fire the sql statmend at the db with the first device.
             $stmt->execute();
             //store the results in the form of an string in result and filter only the first colum out
@@ -64,16 +71,21 @@ if(isset($_COOKIE['Actuator_Type']))
 		
             for($i = 0; $i < ($stmt->rowCount()); $i++)
             {
-				
-				echo('<input type="radio" name=actuator');
-				
+				echo('<div>');
+				echo('<input type="radio"');
+				echo('id="');
+                echo($result[$i]);
+                echo('"');
+                echo('name=actuator');
 				echo(" value=");
 				
 				echo($result[$i]);
 				echo('>');
+                echo('<label for="');
 				echo($result[$i]);
-				echo('<p>');
-				
+                echo('">');
+                echo($result[$i]);
+				echo('</div>');
 
             }
 ?>
