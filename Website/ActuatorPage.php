@@ -38,6 +38,7 @@
                     <li class="active"><a href="ActuatorPage.php">Actuators</a></li>
                     <li><a href="VisualizationPage.php">Visualizations</a></li>
                     <li><a href="ConfigurationPage.php">Configurations</a></li>
+                    <li><a href="api.php?logout=1">Logout</a></li>
                 </ul>
             </div>
         </div>
