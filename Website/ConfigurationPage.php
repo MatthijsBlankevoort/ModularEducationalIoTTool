@@ -7,6 +7,7 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
     
   <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet">
 
 
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -38,20 +39,33 @@
         </div>
     </nav>
             <div class="container">   
+            <div>
+                
+            </div>
                 <div class="row">
                     <div class="col-md-6 col-xs-12 btn-align-center">
                         <a href="SensorPage.php">
                             <button class="btn btn-primary mybtn-lg button1" type="button" id="test">
-                            <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible"></span><hr><span class="test"><?php echo json_encode($_COOKIE['Sensor_Type']);?></span></button>
+                            <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Sensor <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Sensor_Type']);?></span></button>
                         </a>
                     </div>
 
                     <div class="col-md-6 col-xs-12 btn-align-center">
                         <a href="ActuatorPage.php">
                             <button class="btn btn-primary mybtn-lg button1" type="button" id="test">
-                            <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible"></span><hr><span class="test"><?php echo json_encode($_COOKIE['Actuator_Type']);?></span></button>
+                            <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Actuator <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Actuator_Type']);?></span></button>
                         </a>   
+
+
                     </div>
+                    <div class="row">
+                        <div class="col-md-6 col-xs-12 btn-align-center col-md-offset-6">
+                            <form action="/api.php" method="GET">
+                                <input type="number" name="Threshold" placeholder="threshold" class="threshold">
+                            </form>           
+                        </div>                
+                    </div>
+
 
                 </div>
             </div>
