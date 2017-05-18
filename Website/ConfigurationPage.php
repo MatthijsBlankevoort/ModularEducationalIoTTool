@@ -43,58 +43,58 @@
         </div>
     </nav>
             <div class="container">   
-            <div>
-                
-            </div>
                 <div class="row">
                     <div class="col-md-6 col-xs-12 btn-align-center">
+                    <div>
                         <a href="SensorPage.php">
                             <button class="btn btn-primary mybtn-lg button1" type="button" id="test">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Sensor <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Sensor_Type']);?></span></button>
                         </a>
+                        <p id="sensordata" class="text-center">
+                            
+                        </p>    
                     </div>
-                    <div class="row" id="sensordata">
-                        <script type="text/javascript">
-                            function getSensorData()
-                            {
-                                $.ajax({
-                                       type: "GET",
-                                       url: "Sensordata.php",
-                                       data: "{}",
-                                       success: function(data){
-                                            
-                                            var sensorData = data;
-                                            document.getElementById("sensordata").innerHTML = data;
-                                 }
-                               });
-                            }
 
-                        
-                        setInterval(getSensorData, 500);
-                        </script>
 
-                    </div>
+                    </div>      
+
+
+
 
                     <div class="col-md-6 col-xs-12 btn-align-center">
+                        <div class="qq">
                         <a href="ActuatorPage.php">
-                            <button class="btn btn-primary mybtn-lg button1" type="button" id="test">
+                            <button class="btn btn-primary mybtn-lg button1" type="button">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Actuator <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Actuator_Type']);?></span></button>
                         </a>   
-
+                         <form action="/api.php" method="GET">
+                            <input type="number" name="Threshold" placeholder="threshold" class="qq">
+                        </form> 
+ 
+                        </div>
 
                     </div>
-                    <div class="row">
-                        <div class="col-md-6 col-xs-12 btn-align-center col-md-offset-6">
-                            <form action="/api.php" method="GET">
-                                <input type="number" name="Threshold" placeholder="threshold" class="threshold">
-                            </form>           
-                        </div>                
-                    </div>
-
-
                 </div>
             </div>
+            
+                            <script type="text/javascript">
+                                function getSensorData()
+                                {
+                                    $.ajax({
+                                           type: "GET",
+                                           url: "Sensordata.php",
+                                           data: "{}",
+                                           success: function(data){
+                                                
+                                                var sensorData = data;
+                                                document.getElementById("sensordata").innerHTML = "Sensor Value: "+data;
+                                     }
+                                   });
+                                }
 
+                            getSensorData();
+                            setInterval(getSensorData, 500);
+                            </script>
 
 
 
