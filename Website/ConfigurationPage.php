@@ -13,6 +13,10 @@
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="style.css"/>
     <script type="text/javascript" src="Dashboard.js"></script>
+    <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -34,7 +38,6 @@
                     <li><a href="ActuatorPage.php">Actuators</a></li>
                     <li><a href="VisualizationPage.php">Visualizations</a></li>
                     <li class="active"><a href="ConfigurationPage.php">Configurations</a></li>
-                    <li><a href="api.php?logout=1">Logout</a></li>
                 </ul>
             </div>
         </div>
@@ -49,6 +52,27 @@
                             <button class="btn btn-primary mybtn-lg button1" type="button" id="test">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Sensor <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Sensor_Type']);?></span></button>
                         </a>
+                    </div>
+                    <div class="row" id="sensordata">
+                        <script type="text/javascript">
+                            function getSensorData()
+                            {
+                                $.ajax({
+                                       type: "GET",
+                                       url: "Sensordata.php",
+                                       data: "{}",
+                                       success: function(data){
+                                            
+                                            var sensorData = data;
+                                            document.getElementById("sensordata").innerHTML = data;
+                                 }
+                               });
+                            }
+
+                        
+                        setInterval(getSensorData, 500);
+                        </script>
+
                     </div>
 
                     <div class="col-md-6 col-xs-12 btn-align-center">
