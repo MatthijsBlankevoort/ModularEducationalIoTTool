@@ -9,8 +9,8 @@
 
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-         <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> 
-    
+         <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+
 </head>
 <body>
 <script>
@@ -34,7 +34,7 @@ else {
                 </button>
                 <a class="navbar-brand" href="Dashboard.html">IoT Workshop</a>
             </div>
-            
+
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li><a href="Dashboard.html">Dashboard</a></li>
@@ -59,7 +59,7 @@ if(isset($_COOKIE['Sensor_Type']))
 ?>
 		<form method="GET" action="api.php" onsubmit="sensor()">
 		<div class="form-group form-center text-center">
-		<label for="Device1">Sensor Device:</label>
+		<label class="title" for="Device1">Sensor Device:</label>
 
       <section>
 
@@ -92,7 +92,7 @@ if(isset($_COOKIE['Sensor_Type']))
 
         				echo($result[$i]);
         				echo('>');
-                echo('<label for="');
+                echo('<label class="sensorButton" for="');
 
         				echo($result[$i]);
 

@@ -23,7 +23,7 @@ body{
     flex-flow: column;
     margin-top: 10%;
 }
-    
+
 
 .box{
     display: flex;
@@ -48,7 +48,7 @@ input{
 
 #Device2{
     margin-top: .4em;
-    margin-bottom: .4em;    
+    margin-bottom: .4em;
 }
 
 button span{
@@ -145,6 +145,15 @@ i{
 .thresholdsubmit{
   font-size: 1.5em;
 }
+
+.title {
+  background-color: #337ab7;
+  color: white;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-radius: .5em;
+}
+
 /*---------------------------------------------------------------- RADIO BUTTONS---*/
 
 section {
@@ -170,7 +179,7 @@ input[type="radio"]:disabled ~ label {
   background-color: #F00;
 }
 
-label {
+.sensorButton {
   display: block;
   background: white;
   border: 1px solid #337ab7;
