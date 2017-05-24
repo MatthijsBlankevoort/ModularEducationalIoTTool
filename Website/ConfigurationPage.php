@@ -47,10 +47,10 @@
                     <div class="col-md-6 col-xs-12 btn-align-center">
                     <div>
                         <a href="SensorPage.php">
-                            <button class="btn btn-primary mybtn-lg button1" type="button" id="test">
+                            <button class="btn btn-primary mybtn-lg button1 fancybutton" type="button" id="test">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Sensor <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Sensor_Type']);?></span></button>
                         </a>
-                        <p id="sensordata" class="text-center">
+                        <p id="sensordata" class="align-label darkblueborder">
                             
                         </p>    
                     </div>
@@ -62,15 +62,18 @@
 
 
                     <div class="col-md-6 col-xs-12 btn-align-center">
-                        <div class="qq">
+                        <div class="align-label">
                         <a href="ActuatorPage.php">
-                            <button class="btn btn-primary mybtn-lg button1" type="button">
+                            <button class="btn btn-primary mybtn-lg button1 fancybutton" type="button">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Actuator <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Actuator_Type']);?></span></button>
-                        </a>   
-                         <form action="/api.php" method="GET">
-                            <input type="number" name="Threshold" placeholder="threshold" class="qq">
+                        </a>  
+                        <div>
+                         <form action="/api.php" method="GET" id="thresholdform">
+                            <input type="number" name="Threshold" placeholder="threshold">
+                            <button form="thresholdform" class="btn btn-primary"><i class="fa fa-paper-plane-o fa-3x thresholdsubmit" aria-hidden="true"></i><span class="thresholdsubmit">Submit</span></button>
                         </form> 
- 
+                        </div> 
+
                         </div>
 
                     </div>
