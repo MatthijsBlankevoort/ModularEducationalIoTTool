@@ -39,7 +39,7 @@
                     <li><a href="VisualizationPage.php">Visualizations</a></li>
                     <li class="active"><a href="ConfigurationPage.php">Configurations</a></li>
                     <li><a href="api.php?logout=1">Logout</li>
-                    
+
                 </ul>
             </div>
         </div>
@@ -48,7 +48,7 @@
                 <div class="row">
                     <div class="col-md-6 col-xs-12 btn-align-center">
                     <div>
-                        <a href="SensorPage.php">
+                        <a id="sensorbutton" href="">
                             <button class="btn btn-primary mybtn-lg button1 fancybutton" type="button" id="test">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Sensor <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Sensor_Type']);?></span></button>
                         </a>
@@ -56,8 +56,6 @@
                             
                         </p>    
                     </div>
-
-
                     </div>      
 
 
@@ -65,7 +63,7 @@
 
                     <div class="col-md-6 col-xs-12 btn-align-center">
                         <div class="align-label">
-                        <a href="ActuatorPage.php">
+                        <a id="actuatorbutton" href="">
                             <button class="btn btn-primary mybtn-lg button1 fancybutton" type="button">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Actuator <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Actuator_Type']);?></span></button>
                         </a>  
@@ -99,6 +97,36 @@
 
                             getSensorData();
                             setInterval(getSensorData, 500);
+
+                            switch(<?php echo json_encode($_COOKIE['Sensor_Type'])?>){
+                                case "Lichtsensor": $("#sensorbutton").attr("href", "https://en.wikipedia.org/wiki/Photoresistor")
+                                break;
+                                case "Temperatuur": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Humidity_Sensor_DHT11")
+                                break;
+                                case "Tilt": $("#sensorbutton").attr("href", "https://en.wikipedia.org/wiki/Photoresistor")
+                                break;
+                                case "Motion": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=PIR_Sensor")
+                                break;
+                                case "Heartbeat": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Pulse_rate_Sensor")
+                                break;
+                                case "Sound": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Sound_Detectorr")
+                                break;
+                                case "Pressure": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Pressure_Sensor-BMP_180")
+                                break;
+                                default: $("#sensorbutton").attr("href", "SensorPage.php");
+                            }
+
+                            switch(<?php echo json_encode($_COOKIE['Actuator_Type'])?>){
+                                case "LED": $("#actuatorbutton").attr("href", "https://nl.wikipedia.org/wiki/Led")
+                                break;
+                                case "LCD-display": $("#actuatorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=LCD")
+                                break;
+                                case "Segment-Display": $("#actuatorbutton").attr("href", "https://en.wikipedia.org/wiki/Seven-segment_display")
+                                break;
+                                case "Buzzer": $("#actuatorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Passive_Buzzer_Moduler")
+                                break;
+                                default: $("#actuatorbutton").attr("href", "Actuatorpage.php");
+                            }
                             </script>
 
 
