@@ -47,71 +47,61 @@ else {
             </div>
         </div>
     </nav>
-	   <div class="container">
-        <div class="row">
-
-          <section>
-
+    
+    
+<div class="container1">
+    <div class="row1">
           <label class="title" for="Device1">Sensor Device:</label>
+            
+            <?php
+                if(isset($_COOKIE['Sensor_Type']))
+                {
+                    $Sensor_Selected = ($_COOKIE['Sensor_Type']);
+                    $device = ($_COOKIE['Device1']);
+                    echo("<h1><center>Currently selected for device $device: <br><br> $Sensor_Selected</h1>");
+                }
+            ?>
 
-<?php
-if(isset($_COOKIE['Sensor_Type']))
-{
-	$Sensor_Selected = ($_COOKIE['Sensor_Type']);
-	$device = ($_COOKIE['Device1']);
-	echo("<h1><center>Currently selected for device $device: <br><br> $Sensor_Selected</h1>");
-}
-?>
-		<form method="GET" action="api.php" onsubmit="sensor()">
-		<div class="form-group form-center text-center">
+            <form method="GET" action="api.php" onsubmit="sensor()">
+                <div class="form-group form-center text-center">
+                    <div class="sensorButtons">
+                          <?php
+                                require_once('config.php');
+                                require_once('database.php');
 
-        <div class="sensorButtons">
-              <?php
-                        require_once('config.php');
-                        require_once('database.php');
+                                $stmt = $con_db->prepare("Select Sensor_type from Sensor where Sensor_active = '0';");
+                                // Next fire the sql statmend at the db with the first device.
+                                $stmt->execute();
+                                //store the results in the form of an string in result and filter only the first colum out
+                                $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-
-                          $stmt = $con_db->prepare("Select Sensor_type from Sensor where Sensor_active = '0';");
-                          // Next fire the sql statmend at the db with the first device.
-                          $stmt->execute();
-                          //store the results in the form of an string in result and filter only the first colum out
-                          $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-
-
-
-                          for($i = 0; $i < ($stmt->rowCount()); $i++)
-                          {
-
-                              echo('<div>');
-
-                      				echo('<input type="radio" ');
-                              echo('id="');
-                              echo($result[$i]);
-                              echo('"');
-
-                              echo(' name=sensor');
-
-                      				echo(" value=");
-
-                      				echo($result[$i]);
-                      				echo('>');
-                              echo('<label class="sensorButton" for="');
-
-                      				echo($result[$i]);
-
-                              echo('">');
-                              echo($result[$i]);
-
-                              echo('</div>');
-
-                                  }
-              ?>
-        </div>
-      </section>
+                                    for($i = 0; $i < ($stmt->rowCount()); $i++)
+                                    {
+                                        echo('<div class="sensorSuperButton">');
+                                            echo('<input type="radio" ');
+                                            echo('id="');
+                                            echo($result[$i]);
+                                            echo('"');
+                                            echo(' name=sensor');
+                                            echo(" value=");
+                                        
+                                            echo($result[$i]);
+                                            echo('>');
+                                            echo('<label class="sensorButton" for="');
+                                            echo($result[$i]);
+                                            echo('">');
+                                            echo($result[$i]);
+                                        echo('</div>');
+                                    }
+                              ?>
+                    </div>
+                </div>
+            </form>
+                
 		<input type="text" name="sensorpage" value="1" style="visibility:hidden;"/>
-		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg">Submit</button>
-		</form>
+		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg narrowBTN">Submit</button>
 		</div>
     </div>
+    
 </body>
 </html>

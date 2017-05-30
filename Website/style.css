@@ -82,10 +82,17 @@ i{
     margin-top: 0.3em;
 }
 
-.container {
+.container1 {
+    display: flex;
+    justify-content: center;
     margin-top: 50px;
 }
 
+.row1 {
+    display: flex;
+    flex-flow: column;
+
+}
 #sensorDevice {
     display: flex;
     align-items: center;
@@ -130,11 +137,13 @@ i{
 }
 
 .btn{
+    margin: 3em;
     border:2px solid darkblue;
 }
 
 .narrowBTN {
   width: 20%;
+    align-self: center;
 }
 
 .currentSelect {
@@ -272,5 +281,13 @@ input[type="radio"]:checked + label::after {
     }
     .collapse.in{
         display:block !important;
+    }
+}
+
+@media (min-width: 760px) {
+
+    .row1 {
+    min-width: 65em;
+    max-width: 66em;
     }
 }
