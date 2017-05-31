@@ -80,29 +80,9 @@ if(isset($_COOKIE['Sensor_Type']))
             for($i = 0; $i < ($stmt->rowCount()); $i++)
             {
 
-                echo('<div>');
+                echo('<div><input type="radio" id="' .$result[$i]. '" name=sensor value="' .$result[$i]. '"><label for="' .$result[$i]. '">'.$result[$i].'</div>');
 
-        				echo('<input type="radio" ');
-                echo('id="');
-                echo($result[$i]);
-                echo('"');
-
-                echo(' name=sensor');
-
-        				echo(" value=");
-
-        				echo($result[$i]);
-        				echo('>');
-                echo('<label for="');
-
-        				echo($result[$i]);
-
-                echo('">');
-                echo($result[$i]);
-
-                echo('</div>');
-
-                    }
+            }
 ?>
 </section>
 		<input type="text" name="sensorpage" value="1" style="visibility:hidden;"/>
