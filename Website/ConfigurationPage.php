@@ -69,7 +69,17 @@
                         </a>  
                         <div>
                          <form action="/api.php" method="GET" id="thresholdform">
-                            <input type="number" name="Threshold" placeholder="threshold">
+<?php
+						if (isset($_COOKIE['Threshold']))
+						{
+							$Threshold = ($_COOKIE['Threshold']);
+							echo('<input type="number" name="Threshold" placeholder="'.$Threshold.'" value="'.$Threshold.'">');
+						}
+						else
+						{
+							echo('<input type="number" name="Threshold" placeholder="threshold">');
+						}
+?>
                             <button form="thresholdform" class="btn btn-primary"><i class="fa fa-paper-plane-o fa-3x thresholdsubmit" aria-hidden="true"></i><span class="thresholdsubmit">Submit</span></button>
                         </form> 
                         </div> 
