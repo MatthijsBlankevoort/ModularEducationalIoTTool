@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -49,9 +48,23 @@
 <?php
 if(isset($_COOKIE['Actuator_Type']))
 {
-	$Actuator_Selected = ($_COOKIE['Actuator_Type']);
+	require_once('config.php');
+	require_once('database.php');
+
 	$device = ($_COOKIE['Device2']);
-	echo("<h1><center>Currently selected for device $device: $Actuator_Selected</h1>");
+	$stmt = $con_db->prepare("SELECT Actuator_Type FROM Actuator where Device_Device_ID = '$device';");
+	$stmt->execute();
+	$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+	if (isset($result[0]))
+	{
+		$Actuator_Selected = ($result[0]);
+		setcookie('Actuator_Type', $Actuator_Selected, time()+60*60*24);
+		echo("<h1><center>Currently selected for device $device: $Actuator_Selected</h1>");
+	}
+	else
+	{
+		echo("<h1><center>No Actuator device selected for device $device</h1>");
+	}
 }
 ?>
 		<form method="GET" action="api.php" onsubmit="actuator()">

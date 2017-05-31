@@ -511,35 +511,35 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 				switch(isset($Sensor_Type))
 				{
 					case $Sensor_Type == "Track sensor":
-					$configuratie = 1;
+					$configuratie = 11;
 					break;
 					
 					case $Sensor_Type == "Temperature sensor":
-					$configuratie = 2;
+					$configuratie = 12;
 					break;
 
 					case $Sensor_Type == "PIR motion sensor":
-					$configuratie = 3;
+					$configuratie = 13;
 					break;
 					
 					case $Sensor_Type == "Heartbeat sensor":
-					$configuratie = 4;
+					$configuratie = 14;
 					break;
 					
 					case $Sensor_Type == "Sound sensor":
-					$configuratie = 5;
+					$configuratie = 15;
 					break;
 					
 					case $Sensor_Type == "Ultrasonic sensor":
-					$configuratie = 6;
+					$configuratie = 16;
 					break;
 					
 					case $Sensor_Type == "Potentiometer":
-					$configuratie = 7;
+					$configuratie = 17;
 					break;
 					
 					case $Sensor_Type == "Track sensor":
-					$configuratie = 8;
+					$configuratie = 18;
 					break;
 					
 				}
@@ -622,7 +622,20 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 			// echo($i);
 			if ($DISTINCT[$i] == $Actuator_Type)
 			{
-				$configuratie = $i + 1;
+				switch(isset($Actuator_Type))
+				{
+					case $Actuator_Type == "LED":
+					$configuratie = 21;
+					break;
+					
+					case $Actuator_Type == "Servomotor":
+					$configuratie = 22;
+					break;
+
+					case $Actuator_Type == "Buzzer":
+					$configuratie = 23;
+					break;
+				}
 			}
 		}
 		if ((isset($_COOKIE['Actuator_Type'])) && ($_COOKIE['Actuator_Type'] == $Actuator_Type))
