@@ -1,5 +1,11 @@
-
 <?php
+// O hi there I did not see you there.
+// if you are reading this it means you have successfully opened the Api file.
+// Well prepare for a beautiful trip through the wonders of the “Brain” behind the webpage.
+// So, take a seed, buckle your seedbed and prepare for a trip through the works of the Api file.
+// O and one more thing: this file is made by team IOT Workshop Healthcare mid 2017
+
+
 /////////////////////////////////////////////////////
 //Get the php files loaded before doing snizzel
   require_once('config.php');
@@ -12,7 +18,6 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 {
 	$Device1 = strtoupper ($_GET['Device1']);
 	$Device2 = strtoupper ($_GET['Device2']);
-	// Go through all options for the selection of devices:
 	// Ask the Database if the device is in there by preparing the statment first
 	$stmt = $con_db->prepare("Select Device_id from Device where Device_ID = ?");
 	// Next fire the sql statmend at the db with the first device.
@@ -23,59 +28,78 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 	$stmt->execute([$_GET['Device2']]);
 	$result2 = $stmt->fetch(PDO::FETCH_OBJ);
 	//create a switch in if else staments that will handele all resonsen of the Database
+	// if there is no device1
 	if ($result1 == NULL)
 		{
 			header("Location: LoginPage.php?Message=1");
 			exit;
 		}
+	// if there is no device2
 	elseif ($result2 == NULL)
 		{
 			header("Location: LoginPage.php?Message=2");
 			exit;
 		}
+	//if input device1 = device2
 	elseif (($_GET['Device1']) == ($_GET['Device2']))
 		{
 			header("Location: LoginPage.php?Message=3");
 			exit;
 		}
+	// if device1 != device1 from database or device2 != device2 
 	elseif (($result1->Device_id) != $Device1 || (($result2->Device_id) != $Device2))
 		{
 			header("Location: LoginPage.php?Message=4");
 			exit;
 		}
+	// if device 1 matches device 1 from database and same for device2
 	elseif ((($result1->Device_id) == ($Device1)) && (($result2->Device_id) == ($Device2)))
 		{
+			// Now we will build up a connection betwean 2 devices in order to later know what sensor is connected to a partner device
 			// todo clean sql querys and handeling of errors
+			// see if device 1 is in the devicelink database
 			$stmt = $con_db->prepare("select Device1 from DeviceLink where device1 = '$Device1';");
 			$stmt->execute();
 			$result1 = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-
+			
+			// see if device 2 is in the devicelink database
 			$stmt = $con_db->prepare("select Device2 from DeviceLink where device2 = '$Device2';");
 			$stmt->execute();
 			$result2 = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 			
+			// see if device 1 is in the devicelink database and if its not already linked to aunother device
 			$stmt = $con_db->prepare("select Device1 from DeviceLink where device1 = '$Device2';");
 			$stmt->execute();
 			$result3 = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
+			// see if device 2 is in the devicelink database and if its not already linked to aunother device
 			$stmt = $con_db->prepare("select Device2 from DeviceLink where device2 = '$Device1';");
 			$stmt->execute();
 			$result4 = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 			
+			// for debug
+			// {
 			// print_r($result1);
 			// print_r($result2);
 			// print_r($result3);
 			// print_r($result4);
+			// }
+			
+			// if device 1 and device 2 have a result in them it means there is a entry of that device in the database
 			if ((isset($result1[0])) && (isset($result2[0])))
 			{
-				
+				// if device 1 matches device 1 from database and same for device2
 				if ($result1[0] == $Device1 && $result2[0] == $Device2)
 				{
-				echo('hoi');
+				// set a cookie for device1 and device2 for easy access
 				setcookie('Device1', $Device1, time()+60*60*24);
 				setcookie('Device2', $Device2, time()+60*60*24);
+				// also check to see if Sensor_Type and Actuator_Type cookies are set. if so continue else pull them from the database and store them in a cookie
+				// make sure that if there is a entry in the database for the device it means that the devices are already set and we need that data
+				// if its not set in the database well than dont do anything
 				if ((!isset($_COOKIE['Sensor_Type'])) || (!isset($_COOKIE['Actuator_Type'])))
 				{
+					// select in the databse the sensor id and sensor type and sore them
 					$stmt = $con_db->prepare("select Sensor_Type,Sensor_ID from Sensor where Device_Device_ID = '$Device1'");
 					$stmt->execute();
 					$result1 = $stmt->fetchAll();
@@ -86,6 +110,7 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 						setcookie('Sensor_Type', $Sensor_Type, time()+60*60*24);
 						setcookie('Sensor_ID', $Sensor_ID, time()+60*60*24);
 					}
+					// select in the database the actuator type,actuator id and threshold and sore them in cookies
 					$stmt = $con_db->prepare("select Actuator_Type,Actuator_ID,Threshold from Actuator where Device_Device_ID = '$Device2'");
 					$stmt->execute();
 					$result2 = $stmt->fetchAll();
@@ -99,13 +124,14 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 						setcookie('Actuator_ID', $Actuator_ID, time()+60*60*24);
 						setcookie('Threshold', $Threshold, time()+60*60*24);
 					}
-
+					// done ? oke then go ahead to the dashboard
 					header("Location: Dashboard.html");
 				}
-				
+				// all cookies set? oke go the dashboard
 				header("Location: Dashboard.html");
 				exit;
 				}
+				// make sure that if there is an entry it is the correct device and same for device2
 				elseif ($result1[0] == $Device2)
 				{
 					echo("Device 1 Already set in Database");
@@ -118,6 +144,7 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 				}
 				
 			}
+			// handel all the diverent results if entrys are not empty but 1 is filled
 			elseif (!empty($result1))
 			{
 				echo("Device 1 Already set in Database");
@@ -134,12 +161,13 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 			{
 				echo("Device 1 Already set in Databse");
 			}
+			// but if there are no entrys in in both the results it means it not yet in the database and we can insert it
 			elseif ((!isset($result1[0])) && (!isset($result2[0])))
 			{
 				$stmt = $con_db->prepare("Insert into DeviceLink (Device1,Device2) Value ('$Device1','$Device2');");
 				if($stmt->execute())
 				{
-					echo('insert');
+					// o and since we creat a new link in the databse we don't have a actuator or a sensor conencted to either one of the devices so no need to search for them
 					setcookie('Device1', $Device1, time()+60*60*24);
 					setcookie('Device2', $Device2, time()+60*60*24);
 					header("Location: Dashboard.html");
@@ -158,31 +186,29 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 		{
 			header("Location: LoginPage.php?Message=8");
 			exit;
-			// print_r ($result1->Device_id);
-			// print ($Device1);
-			// ECHO '<BR>';
-			// print_r ($result2->Device_id);
-			// print ($Device2);
 		}
         
 	
 
 }
+// are you going already? well then if you realy want to we need to make sure you never where here in the first place
 if(isset($_GET['logout']))
 {
+	// disconnect the sensor from the device
 	if (isset($_COOKIE['Sensor_ID']))
 	{
 		$Sensor_IDtoupdate = ($_COOKIE['Sensor_ID']);
 		$stmt = $con_db->prepare("Update Sensor SET Sensor_active = '0', Device_Device_ID = 'Standby' where Sensor_ID = '$Sensor_IDtoupdate';");
 		$stmt->execute();
 	}
+	// disconnect the actuator from the device
 	if (isset($_COOKIE['Actuator_ID']))
 	{
 		$Actuator_IDtoupdate = ($_COOKIE['Actuator_ID']);
 		$stmt = $con_db->prepare("Update Actuator SET Actuator_active = '0', Device_Device_ID = 'Standby' where Actuator_ID = '$Actuator_IDtoupdate';");
 		$stmt->execute();
 	}
-	
+	// delete the link of the devices from the databse to make them avalible for connection again
 	if ((isset($_COOKIE['Device1'])) && (isset($_COOKIE['Device2'])))
 	{
 		$Device1 = ($_COOKIE['Device1']);
@@ -190,7 +216,16 @@ if(isset($_GET['logout']))
 		$stmt = $con_db->prepare("Delete Device1,Device2 from DeviceLink where Device1 = '$Device1' and Device2 = '$Device2';");
 		$stmt->execute();
 	}
-	
+//	 cookies? O are you still here? just delete all the cookies we have stored or give them to the cookie monster i dont care.
+//                _  _
+//              _/0\/ \_
+//     .-.   .-` \_/\0/ '-.
+//    /:::\ / ,_________,  \
+//   /\:::/ \  '. (:::/  `'-;
+//   \ `-'`\ '._ `"'"'\__    \
+//    `'-.  \   `)-=-=(  `,   |
+//        \  `-"`      `"-`   /
+
 	$past = time() - 3600;
 	foreach ( $_COOKIE as $key => $value )
 	{
@@ -217,7 +252,6 @@ if(isset($_GET['deviceId']) && isset($_GET['configuratie']))
 		}
 }
 //Get variables from sensor NodeMCU
-//Todo make an if() for url of actuator which only sends ID, actuatorID, function
 if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']))
 {
 	$Device = ($_GET['deviceId']);
@@ -259,6 +293,11 @@ if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']))
 		echo('Unknown Function');
 	}
 }
+//127.0.0.1/api.php?deviceId=TEST2&deviceFunctie=actuator&sensorId=001&value=1
+// deviceId=TEST2
+// deviceFunctie=actuator
+// sensorId=001
+// value=1 if deviceFuntion is sensor de value is a must but if its an actuator it will not be used
 if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sensorId']) && isset($_GET['value']))
 {
 	$deviceID       = ($_GET['deviceId']);
@@ -266,8 +305,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 	$sensorId       = ($_GET['sensorId']);
 	$value          = ($_GET['value']);
 	
-	//Todo: Controleer of deviceID bestaat in Database zo ja dan... x
-   
+    // make sure that de device is in the database
 	$stmt = $con_db->prepare("Select Device_ID from Device where Device_ID = '$deviceID'");
 	if($stmt->execute())
 	{
@@ -358,7 +396,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 					//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
 					$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' 
 											and Sensor.Sensor_ID = '$sensorId' 
-											order by Sensor_Timestamp Limit 1");	
+											order by Sensor_Timestamp DESC Limit 1");	
 					$stmt->execute();
 					$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 					$SensorValue = $result['0'];
