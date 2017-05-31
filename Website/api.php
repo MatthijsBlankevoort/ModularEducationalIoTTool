@@ -508,6 +508,41 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 			if ($DISTINCT[$i] == $Sensor_Type)
 			{
 				$configuratie = $i + 1;
+				switch(isset($Sensor_Type))
+				{
+					case $Sensor_Type == "Track sensor":
+					$configuratie = 1;
+					break;
+					
+					case $Sensor_Type == "Temperature sensor":
+					$configuratie = 2;
+					break;
+
+					case $Sensor_Type == "PIR motion sensor":
+					$configuratie = 3;
+					break;
+					
+					case $Sensor_Type == "Heartbeat sensor":
+					$configuratie = 4;
+					break;
+					
+					case $Sensor_Type == "Sound sensor":
+					$configuratie = 5;
+					break;
+					
+					case $Sensor_Type == "Ultrasonic sensor":
+					$configuratie = 6;
+					break;
+					
+					case $Sensor_Type == "Potentiometer":
+					$configuratie = 7;
+					break;
+					
+					case $Sensor_Type == "Track sensor":
+					$configuratie = 8;
+					break;
+					
+				}
 			}
 		}
 		// echo($configuratie);
