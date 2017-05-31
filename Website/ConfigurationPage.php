@@ -48,11 +48,11 @@
                 <div class="row">
                     <div class="col-md-6 col-xs-12 btn-align-center">
                     <div>
-                        <a id="sensorbutton" href="">
+                        <a id="sensorbutton" href="" target="_blank">
                             <button class="btn btn-primary mybtn-lg button1 fancybutton" type="button" id="test">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Sensor <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Sensor_Type']);?></span></button>
                         </a>
-                        <p id="sensordata" class="align-label darkblueborder">
+                        <p id="sensordata" class="align-label darkblueborder" >
                             
                         </p>    
                     </div>
@@ -63,7 +63,7 @@
 
                     <div class="col-md-6 col-xs-12 btn-align-center">
                         <div class="align-label">
-                        <a id="actuatorbutton" href="">
+                        <a id="actuatorbutton" href="" target="_blank">
                             <button class="btn btn-primary mybtn-lg button1 fancybutton" type="button">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Actuator <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Actuator_Type']);?></span></button>
                         </a>  
@@ -99,19 +99,21 @@
                             setInterval(getSensorData, 500);
 
                             switch(<?php echo json_encode($_COOKIE['Sensor_Type'])?>){
-                                case "Lichtsensor": $("#sensorbutton").attr("href", "https://en.wikipedia.org/wiki/Photoresistor")
+                                case "Track sensor": $("#sensorbutton").attr("href", "https://www.dfrobot.com/wiki/index.php/Line_Tracking_Sensor_for_Arduino_(SKU:SEN0017)")
                                 break;
-                                case "Temperatuur": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Humidity_Sensor_DHT11")
+                                case "Temperature sensor": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Humidity_Sensor_DHT11")
                                 break;
-                                case "Tilt": $("#sensorbutton").attr("href", "https://en.wikipedia.org/wiki/Photoresistor")
+                                case "PIR motion sensor": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=PIR_Sensor")
                                 break;
-                                case "Motion": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=PIR_Sensor")
+                                case "Heartbeat sensor": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Pulse_rate_Sensor")
                                 break;
-                                case "Heartbeat": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Pulse_rate_Sensor")
+                                case "Sound sensor": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Sound_Detector")
                                 break;
-                                case "Sound": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Sound_Detectorr")
+                                case "Ultrasonic sensor": $("#sensorbutton").attr("href", "https://nl.wikipedia.org/wiki/Ultrasoon_sensor")
                                 break;
-                                case "Pressure": $("#sensorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Pressure_Sensor-BMP_180")
+                                case "Potentiometer": $("#sensorbutton").attr("href", "https://en.wikipedia.org/wiki/Potentiometer")
+                                break;
+                                case "Light sensor": $("#sensorbutton").attr("href", "https://en.wikipedia.org/wiki/Photoresistor")
                                 break;
                                 default: $("#sensorbutton").attr("href", "SensorPage.php");
                             }
@@ -119,11 +121,9 @@
                             switch(<?php echo json_encode($_COOKIE['Actuator_Type'])?>){
                                 case "LED": $("#actuatorbutton").attr("href", "https://nl.wikipedia.org/wiki/Led")
                                 break;
-                                case "LCD-display": $("#actuatorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=LCD")
+                                case "Servomotor": $("#actuatorbutton").attr("href", "https://en.wikipedia.org/wiki/Servomotor")
                                 break;
-                                case "Segment-Display": $("#actuatorbutton").attr("href", "https://en.wikipedia.org/wiki/Seven-segment_display")
-                                break;
-                                case "Buzzer": $("#actuatorbutton").attr("href", "https://wiki.eprolabs.com/index.php?title=Passive_Buzzer_Moduler")
+                                case "Buzzer": $("#actuatorbutton").attr("href", "https://en.wikipedia.org/wiki/Buzzer")
                                 break;
                                 default: $("#actuatorbutton").attr("href", "Actuatorpage.php");
                             }
