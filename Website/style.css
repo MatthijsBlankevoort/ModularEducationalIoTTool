@@ -23,7 +23,7 @@ body{
     flex-flow: column;
     margin-top: 10%;
 }
-
+    
 
 .box{
     display: flex;
@@ -38,21 +38,17 @@ label{
 }
 
 input{
-    /*font-size: 30px;
+    font-size: 30px;
     height: 2em;
     border-radius: 10px;
     border: 2px solid black;
     padding-left: 10px;
-    text-transform: uppercase;*/
-}
-
-.hiddenInput {
-  width: 100%;
+    text-transform: uppercase;
 }
 
 #Device2{
     margin-top: .4em;
-    margin-bottom: .4em;
+    margin-bottom: .4em;    
 }
 
 button span{
@@ -82,17 +78,10 @@ i{
     margin-top: 0.3em;
 }
 
-.container1 {
-    display: flex;
-    justify-content: center;
+.container {
     margin-top: 50px;
 }
 
-.row1 {
-    display: flex;
-    flex-flow: column;
-
-}
 #sensorDevice {
     display: flex;
     align-items: center;
@@ -137,17 +126,7 @@ i{
 }
 
 .btn{
-    margin: 3em;
     border:2px solid darkblue;
-}
-
-.narrowBTN {
-  width: 20%;
-    align-self: center;
-}
-
-.currentSelect {
-  margin: 2em;
 }
 
 .align-label{
@@ -166,25 +145,11 @@ i{
 .thresholdsubmit{
   font-size: 1.5em;
 }
-
-.title {
-  color: #337ab7;
-  font-size: 4em;
-  border-radius: .5em;
-}
-
-.text-center {
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-}
-
 /*---------------------------------------------------------------- RADIO BUTTONS---*/
 
 section {
   display: flex;
   flex-flow: row wrap;
-  justify-content: center;
 }
 
 section > div {
@@ -205,20 +170,13 @@ input[type="radio"]:disabled ~ label {
   background-color: #F00;
 }
 
-.sensorButtons{
-  display: flex;
-  flex-wrap: wrap;
-  max-width: 100%;
-  justify-content: space-around;
-}
-
-.sensorButton {
+label {
   display: block;
   background: white;
   border: 1px solid #337ab7;
-  border-radius: .5em;
-  padding: 1.5em;
-  margin: 1rem;
+  border-radius: 2px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
   text-align: center;
   box-shadow: 0px 3px 10px -2px rgba(161, 170, 166, 0.5);
   position: relative;
@@ -228,7 +186,6 @@ input[type="radio"]:checked + label {
   background: #337ab7;
   color: white;
 }
-
 input[type="radio"]:checked + label::after {
   color: #3d3f43;
   font-family: FontAwesome;
@@ -281,13 +238,5 @@ input[type="radio"]:checked + label::after {
     }
     .collapse.in{
         display:block !important;
-    }
-}
-
-@media (min-width: 760px) {
-
-    .row1 {
-    min-width: 65em;
-    max-width: 66em;
     }
 }

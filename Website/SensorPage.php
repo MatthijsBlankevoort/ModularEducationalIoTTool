@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,8 +10,8 @@
 
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
-         <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
-
+         <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> 
+    
 </head>
 <body>
 <script>
@@ -34,7 +35,7 @@ else {
                 </button>
                 <a class="navbar-brand" href="Dashboard.html">IoT Workshop</a>
             </div>
-
+            
             <div class="collapse navbar-collapse" id="myNavbar">
                 <ul class="nav navbar-nav">
                     <li><a href="Dashboard.html">Dashboard</a></li>
@@ -47,61 +48,67 @@ else {
             </div>
         </div>
     </nav>
-    
-    
-<div class="container1">
-    <div class="row1">
-          <label class="title" for="Device1">Sensor Device:</label>
-            
-            <?php
-                if(isset($_COOKIE['Sensor_Type']))
-                {
-                    $Sensor_Selected = ($_COOKIE['Sensor_Type']);
-                    $device = ($_COOKIE['Device1']);
-                    echo("<h1><center>Currently selected for device $device: <br><br> $Sensor_Selected</h1>");
-                }
-            ?>
+	   <div class="container">
+        <div class="row">
+<?php
+if(isset($_COOKIE['Sensor_Type']))
+{
+	$Sensor_Selected = ($_COOKIE['Sensor_Type']);
+	$device = ($_COOKIE['Device1']);
+	echo("<h1><center>Currently selected for device $device: $Sensor_Selected</h1>");
+}
+?>
+		<form method="GET" action="api.php" onsubmit="sensor()">
+		<div class="form-group form-center text-center">
+		<label for="Device1">Sensor Device:</label>
 
-            <form method="GET" action="api.php" onsubmit="sensor()">
-                <div class="form-group form-center text-center">
-                    <div class="sensorButtons">
-                          <?php
-                                require_once('config.php');
-                                require_once('database.php');
+      <section>
 
-                                $stmt = $con_db->prepare("Select Sensor_type from Sensor where Sensor_active = '0';");
-                                // Next fire the sql statmend at the db with the first device.
-                                $stmt->execute();
-                                //store the results in the form of an string in result and filter only the first colum out
-                                $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+<?php
+          require_once('config.php');
+          require_once('database.php');
 
-                                    for($i = 0; $i < ($stmt->rowCount()); $i++)
-                                    {
-                                        echo('<div class="sensorSuperButton">');
-                                            echo('<input type="radio" ');
-                                            echo('id="');
-                                            echo($result[$i]);
-                                            echo('"');
-                                            echo(' name=sensor');
-                                            echo(" value=");
-                                        
-                                            echo($result[$i]);
-                                            echo('>');
-                                            echo('<label class="sensorButton" for="');
-                                            echo($result[$i]);
-                                            echo('">');
-                                            echo($result[$i]);
-                                        echo('</div>');
-                                    }
-                              ?>
-                    </div>
-                </div>
-            </form>
-                
+
+            $stmt = $con_db->prepare("Select Sensor_type from Sensor where Sensor_active = '0';");
+            // Next fire the sql statmend at the db with the first device.
+            $stmt->execute();
+            //store the results in the form of an string in result and filter only the first colum out
+            $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+
+
+
+            for($i = 0; $i < ($stmt->rowCount()); $i++)
+            {
+
+                echo('<div>');
+
+        				echo('<input type="radio" ');
+                echo('id="');
+                echo($result[$i]);
+                echo('"');
+
+                echo(' name=sensor');
+
+        				echo(" value=");
+
+        				echo($result[$i]);
+        				echo('>');
+                echo('<label for="');
+
+        				echo($result[$i]);
+
+                echo('">');
+                echo($result[$i]);
+
+                echo('</div>');
+
+                    }
+?>
+</section>
 		<input type="text" name="sensorpage" value="1" style="visibility:hidden;"/>
-		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg narrowBTN">Submit</button>
+		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg">Submit</button>
+		</form>
 		</div>
     </div>
-    
 </body>
 </html>

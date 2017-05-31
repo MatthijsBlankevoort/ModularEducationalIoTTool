@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,69 +44,58 @@
             </div>
         </div>
     </nav>
-    
-
-    
-    
-    
-    
-<div class="container1">
-    <div class="row1">
-        <label class="title" for="Device1">Actuator Device:</label>
-
-            <?php
-                if(isset($_COOKIE['Actuator_Type']))
-                {
-                	$Actuator_Selected = ($_COOKIE['Actuator_Type']);
-                	$device = ($_COOKIE['Device2']);
-                	echo("<h1><center>Currently selected for device $device: <br><br> $Actuator_Selected</h1>");
-                }
-            ?>
-        
-        	<form method="GET" action="api.php" onsubmit="actuator()">
-                <div class="form-group form-center text-center">
-                    <div class="sensorButtons">
-                        <?php
-                                    require_once('config.php');
-                                    require_once('database.php');
+	   <div class="container">
+        <div class="row">
+<?php
+if(isset($_COOKIE['Actuator_Type']))
+{
+	$Actuator_Selected = ($_COOKIE['Actuator_Type']);
+	$device = ($_COOKIE['Device2']);
+	echo("<h1><center>Currently selected for device $device: $Actuator_Selected</h1>");
+}
+?>
+		<form method="GET" action="api.php" onsubmit="actuator()">
+		<div class="form-group form-center text-center">
+		<label for="Device1">Actuator Device:</label>
+		<p>
+		
+		
+<?php
+            require_once('config.php');
+            require_once('database.php');
 
 
-                                    $stmt = $con_db->prepare("select Actuator_Type from Actuator where Actuator_active = '0';");
-                                    // Next fire the sql statmend at the db with the first device.
-                                    $stmt->execute();
-                                    //store the results in the form of an string in result and filter only the first colum out
-                                    $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
+            $stmt = $con_db->prepare("select Actuator_Type from Actuator where Actuator_active = '0';");
+            // Next fire the sql statmend at the db with the first device.
+            $stmt->execute();
+            //store the results in the form of an string in result and filter only the first colum out
+            $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);         
+		
+		
+            for($i = 0; $i < ($stmt->rowCount()); $i++)
+            {
+				echo('<div>');
+				echo('<input type="radio"');
+				echo('id="');
+                echo($result[$i]);
+                echo('"');
+                echo('name=actuator');
+				echo(" value=");
+				
+				echo($result[$i]);
+				echo('>');
+                echo('<label for="');
+				echo($result[$i]);
+                echo('">');
+                echo($result[$i]);
+				echo('</div>');
 
-
-                                    for($i = 0; $i < ($stmt->rowCount()); $i++)
-                                    {
-                                        echo('<div>');
-                                        echo('<input type="radio"');
-                                        echo('id="');
-                                        echo($result[$i]);
-                                        echo('"');
-                                        echo('name=actuator');
-                                        echo(" value=");
-
-                                        echo($result[$i]);
-                                        echo('>');
-                                        echo('<label class="sensorButton" for="');
-                                        echo($result[$i]);
-                                        echo('">');
-                                        echo($result[$i]);
-                                        echo('</div>');
-
-                                    }
-                        ?>
-
-                    </div>
-                </div>
-            </form>
-        
-		          <input class="hiddenInput" type="text" name="actuatorpage" value="1" style="visibility:hidden;" />
-		          <button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg narrowBTN">Submit</button>
-
+            }
+?>
+		<input type="text" name="actuatorpage" value="1" style="visibility:hidden;" />
+		<button type="submit" value="Submit" class="btn btn-block btn-primary btn-lg">Submit</button>
+		</form>
+		</div>
     </div>
-</div>  
 </body>
 </html>
