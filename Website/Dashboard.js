@@ -40,4 +40,23 @@ $(document).ready(function(){
 		$(".button4 span").toggleClass("invisible");
 		$(".button4 hr").toggleClass("invisible");
 	});
+	$("#stopsensor").click(function(){
+		$("#stopsensor").toggleClass("btn-success");
+		$("#stopsensor").toggleClass("btn-danger");
+		$("#stopsensor i").toggleClass("fa-play");
+		$("#stopsensor i").toggleClass("fa-ban");
+			$("#stopsensor .sensortext").text(function(i, v){
+				return v === 'Start sensors' ? 'Stop sensors' : 'Start sensors';
+			});
+		});
+	$("#stopactuator").click(function(){
+		$("#stopactuator").toggleClass("btn-success");
+		$("#stopactuator").toggleClass("btn-danger");
+		$("#stopactuator i").toggleClass("fa-play");
+		$("#stopactuator i").toggleClass("fa-ban");
+		// $("#stopactuator .actuatortext").toggle();
+		$("#stopactuator .actuatortext").text(function(i, v){
+			return v === 'Start actuators' ? 'Stop actuators' : 'Start actuators';
+		});
+	});
 });

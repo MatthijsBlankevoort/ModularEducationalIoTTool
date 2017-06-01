@@ -46,25 +46,14 @@
     <div class="container">
         <div class="row">
                 <div class="col-xs-12 col-md-6 btn-align-center mouseovertest" >
-                        <a href="SensorPage.php">
-                            <button class="btn btn-primary mybtn-lg button1" type="button" id="test">
-                            <i class="fa fa-bullseye fa-10x" aria-hidden="true"></i><span class="invisible">Sensor</span><hr><span class="test">Sensor</span></button>
+                        <a>
+                            <button class="btn btn-danger mybtn-lg button1" type="button" id="stopsensor">
+                            <i class="fa fa-ban fa-10x" aria-hidden="true"></i><span class="invisible sensortext">Stop sensors</span><hr><span class="test sensortext">Stop sensors</span></button>
                         </a>
                     </div>   
-                    <div class="col-xs-12 col-md-6 btn-align-center mouseovertest">
-                        <a href="ActuatorPage.php">
-                            <button class="btn mybtn-lg btn-primary button2" type="button"><i class="fa fa-lightbulb-o fa-10x" aria-hidden="true"></i><span class="invisible">Actuator</span><hr><span class="test">Actuator</span></button>
-                        </a>
-                    </div>
-                    
-                    <div class="col-xs-12 col-md-6 btn-align-center mouseovertest">
-                        <a href="VisualizationPage.html">
-                            <button class="btn mybtn-lg btn-primary button3" type="button"><i class="fa fa-line-chart fa-10x" aria-hidden="true"></i><span class="invisible">Visualization</span><hr><span  class="test">Visualization</span></button>
-                        </a>
-                    </div>
-                    <div class="col-xs-12 col-md-6 btn-align-center mouseovertest">
-                        <a href="ConfigurationPage.html">
-                            <button class="btn mybtn-lg btn-primary button4" type="button"><i class="fa fa-cogs fa-10x" aria-hidden="true"></i><span class="invisible">Configuration</span><hr><span class="test">Configuration</span></button>
+                    <div class="col-xs-12 col-md-6 btn-align-center mouseovertest" >
+                        <a>
+                            <button class="btn mybtn-lg btn-danger button2" type="button" id="stopactuator"><i class="fa fa-ban fa-10x" aria-hidden="true"></i><span class="invisible actuatortext">Stop actuators</span><hr><span class=" actuatortext test">Stop actuators</span></button>
                         </a>
                     </div>
             </div> 
