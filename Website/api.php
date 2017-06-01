@@ -12,9 +12,9 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 {
 	$Device1 = strtoupper ($_GET['Device1']);
 	$Device2 = strtoupper ($_GET['Device2']);
-	if (($Device1 = 'ADMIN') && ($Device2 = 'ADMIN'))
+	if (($Device1 == 'ADMIN') && ($Device2 == 'ADMIN'))
 	{
-		echo('lol');	
+		echo('lol2');	
 		header("Location: Adminpage.php");
 		exit;
 	}
