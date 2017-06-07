@@ -50,7 +50,7 @@
 
 
 <div class="container">
-  <h1>Actuator Device:</h1>
+  <h1 class="sensorTitle">Actuator Device:</h1>
           <div class="row">
             <?php
               if(isset($_COOKIE['Actuator_Type']))
@@ -75,8 +75,8 @@
               }
             ?>
 		<form method="GET" action="api.php" onsubmit="actuator()">
-		    <div class="form-group form-center text-center">
-              <section>
+		    <div class="form-group form-center text-center loginForm">
+              <section class="sensorButtons">
 
                   <?php
                               require_once('config.php');
@@ -92,7 +92,7 @@
 
                               for($i = 0; $i < ($stmt->rowCount()); $i++)
                               {
-                  				echo('<div>');
+                  				echo('<div class="radioSensor">');
                   				echo('<input type="radio"');
                   				echo('id="');
                                   echo($result[$i]);
@@ -102,7 +102,7 @@
 
                   				echo($result[$i]);
                   				echo('>');
-                                  echo('<label for="');
+                                  echo('<label class="sensorButton" for="');
                   				echo($result[$i]);
                                   echo('">');
                                   echo($result[$i]);

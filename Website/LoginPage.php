@@ -13,7 +13,7 @@
 	<div class="container box">
 	<i class="fa fa-link fa-20x" aria-hidden="true"></i>
 	<div>
-		<form method="get" action="api.php">
+		<form method="get" action="api.php" class="loginForm">
 
 						<?php
 
@@ -80,15 +80,15 @@
 							}
 						?>
 
-							<div class="form-group form-center text-center">
+							<div class="form-group form-center text-center loginNext">
 
 											<div class="loginDiv">
-												<h1>Sensor Device:</h1>
+												<h1 class="sensorTitle">Sensor Device:</h1>
 												<input type="text" name="Device1" placeholder="Sensor ID">
 											</div>
 
-											<div id="Device2" class="loginDiv">
-											<h1>Actuator Device:</h1>
+											<div class="loginDiv">
+											<h1 class="sensorTitle">Actuator Device:</h1>
 												<input type="text" name="Device2" placeholder="Actuator ID">
 											</div>
 

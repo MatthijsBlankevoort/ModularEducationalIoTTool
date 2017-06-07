@@ -50,7 +50,7 @@ else {
 
 
 <div class="container">
-  <h1>Sensor Device:</h1>
+  <h1 class="sensorTitle">Sensor Device:</h1>
 
       <div class="row">
               <?php
@@ -76,8 +76,8 @@ else {
               }
               ?>
 		<form method="GET" action="api.php" onsubmit="sensor()">
-		    <div class="form-group form-center text-center">
-              <section>
+		    <div class="form-group form-center text-center loginForm">
+              <section class="sensorButtons">
                       <?php
                                 require_once('config.php');
                                 require_once('database.php');
@@ -94,7 +94,7 @@ else {
                                   for($i = 0; $i < ($stmt->rowCount()); $i++)
                                   {
 
-                                      echo('<div><input type="radio" id="' .$result[$i]. '" name=sensor value="' .$result[$i]. '"><label for="' .$result[$i]. '">'.$result[$i].'</div>');
+                                      echo('<div class="radioSensor"><input type="radio" id="' .$result[$i]. '" name=sensor value="' .$result[$i]. '"><label class="sensorButton" for="' .$result[$i]. '">'.$result[$i].'</div>');
 
                                   }
                       ?>

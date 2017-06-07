@@ -8,6 +8,7 @@
 body{
     font-family: "Raleway";
     font-size:14px;
+    background-color:
 }
 
 #buttons {
@@ -44,11 +45,6 @@ input{
     border: 2px solid black;
     padding-left: 10px;
     text-transform: uppercase;
-}
-
-#Device2{
-    margin-top: .4em;
-    margin-bottom: .4em;
 }
 
 button span{
@@ -127,6 +123,11 @@ i{
 
 .btn{
     border:2px solid darkblue;
+    margin: 2em;
+}
+
+.btn-block {
+  width: initial;
 }
 
 .align-label{
@@ -146,7 +147,6 @@ i{
   font-size: 1.5em;
 }
 
-
 .sentitle {
   color: red;
 }
@@ -155,10 +155,41 @@ i{
   padding: 2em;
 }
 
+.loginNext {
+  display: flex;
+  justify-content: center;
+}
+
+.loginForm {
+  display: flex;
+  flex-flow: column wrap;
+  align-items: center;
+}
+
+.sensorTitle {
+  color: #337ab7;
+  font-weight: 600;
+  font-size: 3em;
+}
+
+.sensorButton {
+  padding: 1em;
+}
+
+.sensorButtons {
+  display: flex;
+  flex-flow: wrap;
+  justify-content: space-around;
+}
+
+.radioSensor {
+  padding: 1em;
+}
+
 
 /*---------------------------------------------------------------- RADIO BUTTONS---*/
 
-section {
+/*section {
   display: flex;
   flex-flow: row wrap;
 }
@@ -166,7 +197,7 @@ section {
 section > div {
   flex: 1;
   padding: 1rem;
-}
+}*/
 
 input[type="radio"] {
   display: none;
@@ -182,10 +213,10 @@ input[type="radio"]:disabled ~ label {
 }
 
 label {
-  display: block;
+  /*display: block;*/
   background: white;
   border: 1px solid #337ab7;
-  border-radius: 2px;
+  border-radius: .5em;
   padding: 1.5rem;
   margin-bottom: 1rem;
   text-align: center;
