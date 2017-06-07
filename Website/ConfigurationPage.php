@@ -135,7 +135,7 @@
                                 break;
                                 case "Buzzer": $("#actuatorbutton").attr("href", "https://en.wikipedia.org/wiki/Buzzer")
                                 break;
-                                default: $("#actuatorbutton").attr("href", "Actuatorpage.php");
+                                default: $("#actuatorbutton").attr("href", "ActuatorPage.php");
                             }
                             </script>
 
