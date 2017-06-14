@@ -1,7 +1,6 @@
 /*
     Attiny code slave module
-    Door Filmon
-    Tilt sensor uitlezen en versturen op I2C bus.
+
 
 
    SETUP:
@@ -16,34 +15,33 @@
 
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines
 #include "usiTwiSlave.h"
-#include <dht.h>
 
-dht DHT;
-
-#define I2C_SLAVE_ADDR  2
-#define DHT11_PIN 1
+#define I2C_SLAVE_ADDR  0x04
+#define trackerPin      4
 
 
-unsigned char bytes[4];
-byte byteRcvd = 0;
 uint16_t sensorWaarde = 0;
- 
+byte byteRcvd = 0;
 
 
 void setup() {
   TinyWireS.begin(I2C_SLAVE_ADDR);      // init I2C Slave mode
+  pinMode(trackerPin, INPUT);
 }
 
 void loop() {
-  int chk = DHT.read11(DHT11_PIN); // use DHT library to read the DHT chip
-
-  TinyWireS.send(DHT.temperature);           //sensor waarde
-  TinyWireS.send(sensorWaarde);           //sensor waarde
-
+  if(digitalRead(trackerPin) == HIGH){
+  sensorWaarde = 10;
+  }
+  else {
+    sensorWaarde = 5;
+  }
+  TinyWireS.send(sensorWaarde);        //lichtsensor waarde
   if (TinyWireS.available()) {          // got I2C input!
     byteRcvd = TinyWireS.receive();     // get the byte from master
-    TinyWireS.send(byteRcvd);           //stuurt ontvangen byte terug naar master om te debuggen
+    TinyWireS.send(byteRcvd);           //check
     TinyWireS.send(I2C_SLAVE_ADDR);     //ID
+
   }
   delay(1000);
 
