@@ -18,7 +18,7 @@ String chipID;
 String serverURL = SERVER_URL;
 String response;
 OpenWiFi hotspot;
-
+String serverURL = SERVER_URL;
 
 void printDebugMessage(String message) {
 #ifdef DEBUG_MODE
@@ -76,6 +76,7 @@ void giveCommand(int command) {
 void loop() {
   ESP.wdtFeed();
 
+  
   //Check for button press
   if (digitalRead(BUTTON_PIN) == LOW)
   {
@@ -126,8 +127,13 @@ void requestMessage()
     {
       String configurationApi = getValue(response, ',', 0);
       String valueApi = getValue(response, ',', 1);
+      String thresholdApi = getValue(response, ',', 2);
+      
       int configuration = configurationApi.toInt();
       int value = valueApi.toInt();
+      int threshold = thresholdApi.toInt();
+      
+      //api.php?deviceId=44T4&deviceFunctie=actuator&sensorId=002&value=1
 
       Serial.print("Config received: ");
       Serial.println(configuration);
