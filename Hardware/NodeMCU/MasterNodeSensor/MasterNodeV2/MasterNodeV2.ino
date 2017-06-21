@@ -49,7 +49,7 @@ void setup() {
     }
   }
   hotspot.begin(BACKUP_SSID, BACKUP_PASSWORD);
-  chipID = "11T1";
+  chipID = "22T2";
   String configSSID = String(CONFIG_SSID) + "_" + chipID;
   wifiManager.autoConnect(configSSID.c_str());
 }
@@ -71,7 +71,7 @@ void get_Light() {
   Serial.println(sensorId);
   Serial.println(lightVal);
   Serial.println(checkVal);
-  Serial.println();
+  //Serial.println();
 }
 
 

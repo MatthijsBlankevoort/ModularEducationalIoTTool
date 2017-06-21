@@ -5,7 +5,7 @@
 #include <Wire.h>
 #include "config.h"
 
-#define device 0x04
+#define device 2 //hardcoded device id for testing purposes
 
 
 int oldTime = 0;
@@ -16,6 +16,8 @@ int checkVal = 0;//Check
 String chipID;
 String serverURL = SERVER_URL;
 String response;
+char response2[100];
+
 OpenWiFi hotspot;
 
 
@@ -66,9 +68,11 @@ void get_Light() {
     lightVal = Wire.read();//licht waarde
     checkVal = Wire.read();//check
   }
+  Serial.println(device);
   Serial.println(sensorId);
   Serial.println(lightVal);
   Serial.println(checkVal);
+  Serial.println();
 }
 
 
@@ -76,14 +80,15 @@ void loop() {
   ESP.wdtFeed();
   get_Light();
   Serial.println("Address, value, check: ");
-  delay(1000);
 
+  delay(250);
+/*
   //Check for button press
   if (digitalRead(BUTTON_PIN) == LOW)
   {
     sendButtonPress();
     delay(250);
-  }
+  }*/
   //Every requestDelay, send a request to the server
   if (millis() > oldTime + REQUEST_DELAY)
   {
@@ -108,32 +113,55 @@ void requestMessage()
 
   HTTPClient http;
   //String requestString = serverURL + "/api.php?t=gqi&d=" + chipID + "&v=2";
-  String requestString = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=sensor" + "&sensorId=00" + sensorId + "&value=" + lightVal;
+  String requestString = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=sensor" + "&sensorId=00" + sensorId + "&value=" + lightVal; //url om data te verzenden naar de database
+  String requestString2 = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=sensor"; //url om sensor ID op te vragen
+  if (sensorId == 0) { //als er geen sensorId is dan wordt die eerst opgevraagd
+    http.begin(requestString2);
 
-  http.begin(requestString);
-
-  uint16_t httpCode = http.GET();
-  //Response code for sensor module
-  if (httpCode == 200)
-  {
-    response = http.getString();
-    Serial.print("response: ");
-    Serial.println(response);
-
-    if (response == "-1")
+    uint16_t httpCode = http.GET();
+    //Response code for sensor module
+    if (httpCode == 200)
     {
-      printDebugMessage("There are no messages waiting in the queue");
+      response = http.getString();
+      Serial.print("response: ");
+      Serial.println(response);
+      response.toCharArray(response2, 100);
+      sensorId = atoi(response2);
+
+      if (response == "-1")
+      {
+        printDebugMessage("There are no messages waiting in the queue");
+      }
     }
     else
     {
-   // Serial.print("response: ");
-    //Serial.println(response);
+      //ESP.reset();
     }
-  }
-  else
-  {
-    ESP.reset();
-  }
 
-  http.end();
+    http.end();
+  }
+  if(sensorId != 0) {
+    http.begin(requestString);
+
+    uint16_t httpCode = http.GET();
+    //Response code for sensor module
+    if (httpCode == 200)
+    {
+      response = http.getString();
+      Serial.print("response: ");
+      Serial.println(response);
+
+      if (response == "-1")
+      {
+        printDebugMessage("There are no messages waiting in the queue");
+      }
+
+    }
+    else
+    {
+     // ESP.reset();
+    }
+
+    http.end();
+  }
 }

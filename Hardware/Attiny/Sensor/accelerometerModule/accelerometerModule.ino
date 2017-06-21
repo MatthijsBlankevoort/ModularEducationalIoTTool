@@ -16,37 +16,36 @@
 
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines
 #include "usiTwiSlave.h"
-#include <dht.h>
-
-dht DHT;
 
 #define I2C_SLAVE_ADDR  0x02
-#define DHT11_PIN 1
+int xPin = 1;
+int yPin = 3;
+int zPin = 4;
 
-unsigned long time = millis();
-unsigned long refTimeMs = time;
-long thresholdTimer = 1000;
-
+unsigned char bytes[4];
 byte byteRcvd = 0;
 uint16_t sensorWaarde = 0;
-float tempC = 0;
 
+double xValue, yValue, zValue;
+double roll;
 
 
 void setup() {
   TinyWireS.begin(I2C_SLAVE_ADDR);      // init I2C Slave mode
+  pinMode(xPin, INPUT);
+  pinMode(yPin, INPUT);
+  pinMode(zPin, INPUT);
 }
 
 void loop() {
-
-  if ((call_timerMs(thresholdTimer))) {
-    thresholdTimer += 1000;
-    int chk = DHT.read11(DHT11_PIN); // use DHT library to read the DHT chip
-
-    tempC = DHT.temperature;
-    sensorWaarde = (uint16_t)tempC;
-  }
+  xValue = analogRead(xPin);
+  yValue = analogRead(yPin);
+  zValue = analogRead(zPin);
+  roll = atan2(yValue, zValue) * 57.3;
+  sensorWaarde = (int) roll;
   TinyWireS.send(sensorWaarde);           //sensor waarde
+  //  TinyWireS.send(sensorWaarde);           //sensor waarde
+
   if (TinyWireS.available()) {          // got I2C input!
     byteRcvd = TinyWireS.receive();     // get the byte from master
     TinyWireS.send(byteRcvd);           //stuurt ontvangen byte terug naar master om te debuggen
@@ -54,15 +53,4 @@ void loop() {
   }
 
 }
-//miliseconds timer, will return true if the duration has been passed
-boolean call_timerMs(unsigned long duration) {
-  unsigned long time = millis();
-  unsigned long timer = refTimeMs + duration;
-  //Serial.println(duration);
-  if (time == timer) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
+

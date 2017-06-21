@@ -17,42 +17,47 @@
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines
 #include "usiTwiSlave.h"
 
-#define trigPin 1
-#define echoPin 3
-#define I2C_SLAVE_ADDR  0x06
 
-uint16_t sensorWaarde = 0;
-unsigned char bytes[4];
+
+#define I2C_SLAVE_ADDR  0x02
+#define sensorPin 2
+
+double alpha = 0.75;
+int period = 100;
+double change = 0.0;
+double minval = 0.0;
+uint16_t sensorWaarde = 22;
 byte byteRcvd = 0;
+char c = 'a'; 
 
 
 
 void setup() {
   TinyWireS.begin(I2C_SLAVE_ADDR);      // init I2C Slave mode
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
 }
 
 void loop() {
-
-  long duration, distance;
-  digitalWrite(trigPin, LOW);  // Added this line
-  delayMicroseconds(2); // Added this line
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10); // Added this line
-  digitalWrite(trigPin, LOW);
-  duration = pulseIn(echoPin, HIGH);
-  distance = (duration / 2) / 29.1;
-  sensorWaarde = 5;
+  union {
+    double value;
+    unsigned char bytes[4];
+  }heartRate; 
   
+  static double oldValue = 0;
+  static double oldChange = 0;
+
+  int rawValue = analogRead (sensorPin);
+  heartRate.value = alpha * oldValue + (1 - alpha) * rawValue;
 
 
+  oldValue = heartRate.value;
 
-  TinyWireS.send(sensorWaarde);             //sensor waarde
+  delay (period);
+
+  TinyWireS.send(heartRate.bytes[0]);           //sensor waarde
   if (TinyWireS.available()) {          // got I2C input!
     byteRcvd = TinyWireS.receive();     // get the byte from master
-    TinyWireS.send(byteRcvd);           //stuurt ontvangen byte terug naar master om te debuggen
-    TinyWireS.send(I2C_SLAVE_ADDR);     //ID
+    TinyWireS.send(heartRate.bytes[1]);           //stuurt ontvangen byte terug naar master om te debuggen
+    TinyWireS.send(heartRate.bytes[2]);     //ID
   }
 
 }

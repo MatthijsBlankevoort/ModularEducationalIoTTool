@@ -16,7 +16,7 @@
 #define PROJECT_SHORT_NAME "ICU"
 #define REQUEST_DELAY 2000
 
-#define SERVER_URL "http://oege.ie.hva.nl/~reepm001/icu"
+#define SERVER_URL "http://iotworkshop.aqiqi.nl/"
 #define CONFIG_SSID "icu"
 
 #define BACKUP_SSID "BackupSSIDName"

@@ -31,7 +31,7 @@ int val;
 int timer = 0;
 
 uint8_t flippelichtWaarded = 0;
-uint16_t test = 0;
+uint16_t test = 45;
 uint8_t a = 55;
 unsigned char bytes[4];
 int byteRcvd = 0;
@@ -46,26 +46,32 @@ void setup() {
 }
 
 void loop() {
+  /*
+    if (TinyWireS.available()) {          // got I2C input!
+      // byteRcvd = (TinyWireS.receive() | TinyWireS.receive() << 8);     // get the 2 bytes from master
+      byteRcvd = TinyWireS.receive();     // get the 2 bytes from master
+      TinyWireS.send(byteRcvd);           //check
+      TinyWireS.send(I2C_SLAVE_ADDR);     //ID
+    }
+    byteRcvd = map(byteRcvd, 0, 255, 0, 180);
+  */
+  servo.write(45);      // Turn SG90 servo Left to 45 degrees
+  delay(1000);          // Wait 1 second
+  servo.write(90);      // Turn SG90 servo back to 90 degrees (center position)
+  delay(1000);          // Wait 1 second
+  servo.write(135);     // Turn SG90 servo Right to 135 degrees
+  delay(1000);          // Wait 1 second
+  servo.write(90);      // Turn SG90 servo back to 90 degrees (center position)
+  delay(1000);          // Wait 1 second
 
-  if (TinyWireS.available()) {          // got I2C input!
-    // byteRcvd = (TinyWireS.receive() | TinyWireS.receive() << 8);     // get the 2 bytes from master
-    byteRcvd = TinyWireS.receive();     // get the 2 bytes from master
-    TinyWireS.send(byteRcvd);           //check
-    TinyWireS.send(I2C_SLAVE_ADDR);     //ID
-  }
-
-  byteRcvd = map(byteRcvd, 0, 255, 0, 180);
-
-  servo.write(test);      // Turn SG90 servo Left to 45 degrees
-  delay(100);          // Wait 1 second
-
-  SoftwareServo::refresh();
+  //SoftwareServo::refresh();
+  /*
   if (test < 180) {
     test -= 20;
   }
   else {
     test += 20;
-  }
+  }*/
 }
 
 

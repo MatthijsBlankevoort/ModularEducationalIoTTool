@@ -1,5 +1,6 @@
-/*
+  /*
     Attiny code slave module
+    Actuator LED light
 
 
 
@@ -16,29 +17,33 @@
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines
 #include "usiTwiSlave.h"
 
-#define I2C_SLAVE_ADDR 0x07
-#define potPin      2 //pin 3 op bord (analogread)
-
-uint16_t potWaarde = 0;
-uint16_t sensorWaarde = 0;
-unsigned char bytes[4];
-byte byteRcvd = 0;
+#define I2C_SLAVE_ADDR  0x201
+#define ledPin   1
 
 
+int byteRcvd = 0;
+
+
+o
 void setup() {
   TinyWireS.begin(I2C_SLAVE_ADDR);      // init I2C Slave mode
-  pinMode(potPin, INPUT);
+  pinMode(ledPin, OUTPUT);
 }
 
 void loop() {
-  potWaarde = analogRead(potPin);
-  sensorWaarde = map(potWaarde, 0, 1023, 0, 255);
-  TinyWireS.send(sensorWaarde);        //lichtsensor waarde
+
   if (TinyWireS.available()) {          // got I2C input!
-    byteRcvd = TinyWireS.receive();     // get the byte from master
+    byteRcvd = TinyWireS.receive();     // get the 2 bytes from master
     TinyWireS.send(byteRcvd);           //check
     TinyWireS.send(I2C_SLAVE_ADDR);     //ID
 
   }
+  if (byteRcvd > 160) {
+    digitalWrite(ledPin, LOW);
+  }
+  else {
+    digitalWrite(ledPin, HIGH);
+  }
+
 }
 
