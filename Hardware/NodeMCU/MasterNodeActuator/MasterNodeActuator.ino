@@ -53,11 +53,12 @@ void setup() {
   wifiManager.autoConnect(configSSID.c_str());
 }
 
-void giveCommand(int command) {
+void giveCommand(int command, int threshold) {
   Serial.print("command: ");
   Serial.println(command);
   Wire.beginTransmission(actuator);
   Wire.write(command);
+  Wire.write(threshold);
  // Wire.write(command >> 8);
   Wire.endTransmission();
   delay(5);
@@ -155,7 +156,7 @@ void checkResponse(int configuration, int value) {
 
   //lightsensor/led config
   if (configuration == 20) {
-    giveCommand(value);
+    giveCommand(value, threshold);
   }
 
 

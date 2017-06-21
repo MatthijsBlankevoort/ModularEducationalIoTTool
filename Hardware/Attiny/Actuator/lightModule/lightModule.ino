@@ -34,11 +34,12 @@ void loop() {
 
   if (TinyWireS.available()) {          // got I2C input!
     byteRcvd = TinyWireS.receive();     // get the 2 bytes from master
+    threshold = TinyWireS.receive();
     TinyWireS.send(byteRcvd);           //check
     TinyWireS.send(I2C_SLAVE_ADDR);     //ID
 
   }
-  if (byteRcvd > 160) {
+  if (byteRcvd > threshold) {
     digitalWrite(ledPin, LOW);
   }
   else {
