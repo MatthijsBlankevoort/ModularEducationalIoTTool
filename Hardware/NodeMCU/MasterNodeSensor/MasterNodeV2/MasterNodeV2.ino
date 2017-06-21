@@ -5,7 +5,7 @@
 #include <Wire.h>
 #include "config.h"
 
-#define device 0x02 //hardcoded device id for testing purposes
+#define device 2 //hardcoded device id for testing purposes
 
 
 int oldTime = 0;
