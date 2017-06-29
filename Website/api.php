@@ -252,7 +252,7 @@ if(isset($_GET['deviceId']) && isset($_GET['configuratie']))
 		}
 }
 //Get variables from sensor NodeMCU
-if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']))
+if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && (!isset($_GET['value'])))
 {
 	$Device = ($_GET['deviceId']);
 	$DeviceFunction = ($_GET['deviceFunctie']);
@@ -319,7 +319,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 			
 		{
 			
-		// echo 'deviceID';
+
 			
 
 	
@@ -350,8 +350,8 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 								else
 								{
 									echo 'No Update is progrest. make sure all the things are in order';
-									echo ($sensorId);
-									echo ($deviceID);
+									// echo ($sensorId);
+									// echo ($deviceID);
 								}
 							}
 							// else insert a new data entry
@@ -428,16 +428,9 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 							{
 								echo 'No Threshold value from Database call';
 							}
-						
+						// echo ($configuratie . '<p>');
 						$response = $configuratie . ',' . $SensorValue . ',' .$Threshold;
 						echo $response;
-						// echo $configuratie
-						// echo $result['0'];
-							// $value = 60;
-							// $response = $configuratie . ',' . $dc['value'];
-							// echo ($configuratie);
-							// echo (",");
-							// echo ($value);
 					
 
 					}
@@ -488,7 +481,8 @@ $result1 = $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
 // print_r($result1);
 for($i = 0; $i < ($stmt->rowCount()); $i++)
 {
-	
+
+		header("Location: SensorPage.php"); 	
 	// echo($result0[$i]);
 	// echo($_GET['sensor']);
 	if (($_GET['sensor']) == ($result0[$i]))
@@ -606,9 +600,11 @@ $stmt->execute();
 $result1 = $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
 for($i = 0; $i < ($stmt->rowCount()); $i++)
 {
+		header("Location: ActuatorPage.php"); 
 	// echo("actuator");
 	if (($_GET['actuator']) == ($result0[$i]))
 	{
+
 		$Actuator_Type = ($result0[$i]);
 		$Actuator_ID = ($result1[$i]);
 		$Device = strtoupper ($_COOKIE['Device2']);
