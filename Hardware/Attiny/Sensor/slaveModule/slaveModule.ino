@@ -21,12 +21,8 @@
 #define tiltPin     1
 #define lichtPin    3
 
-uint8_t flipped = 0;
 uint16_t lichtWaarde = 0;
-uint8_t a = 55;
-unsigned char bytes[4];
 byte byteRcvd = 0;
-char c = 'l';
 
 
 

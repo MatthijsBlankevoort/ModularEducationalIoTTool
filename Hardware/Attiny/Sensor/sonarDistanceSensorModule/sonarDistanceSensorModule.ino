@@ -24,6 +24,7 @@
 uint16_t sensorWaarde = 0;
 unsigned char bytes[4];
 byte byteRcvd = 0;
+long duration, distance;
 
 
 
@@ -35,7 +36,7 @@ void setup() {
 
 void loop() {
 
-  long duration, distance;
+
   digitalWrite(trigPin, LOW);  // Added this line
   delayMicroseconds(2); // Added this line
   digitalWrite(trigPin, HIGH);
@@ -43,10 +44,7 @@ void loop() {
   digitalWrite(trigPin, LOW);
   duration = pulseIn(echoPin, HIGH);
   distance = (duration / 2) / 29.1;
-  sensorWaarde = 5;
-  
-
-
+  sensorWaarde = distance;
 
   TinyWireS.send(sensorWaarde);             //sensor waarde
   if (TinyWireS.available()) {          // got I2C input!
@@ -54,6 +52,8 @@ void loop() {
     TinyWireS.send(byteRcvd);           //stuurt ontvangen byte terug naar master om te debuggen
     TinyWireS.send(I2C_SLAVE_ADDR);     //ID
   }
+
+  delay(500);
 
 }
 
