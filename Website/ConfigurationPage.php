@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Links for fonts, bootstrap, CSS, JS -->
     <title>Configuration Page</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
@@ -20,6 +21,7 @@
 
 </head>
 <body>
+    <!-- Bootstrap responsive navbar. -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -44,14 +46,17 @@
             </div>
         </div>
     </nav>
+            <!-- Bootstrap responsive container -->
             <div class="container">   
                 <div class="row">
                     <div class="col-md-6 col-xs-12 btn-align-center">
                     <div>
+                        <!-- Sensor information button that displays the selected sensor module that is saved in the Cookie. -->
                         <a id="sensorbutton" href="" target="_blank">
                             <button class="btn btn-primary mybtn-lg button1 fancybutton" type="button" id="test">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Sensor <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Sensor_Type']);?></span></button>
                         </a>
+                        <!-- Paragraph for displaying the sensor data real time -->
                         <p id="sensordata" class="align-label darkblueborder" >
                             
                         </p>    
@@ -60,16 +65,19 @@
 
 
 
-
+                    <!-- Div for the actuator information button -->
                     <div class="col-md-6 col-xs-12 btn-align-center">
                         <div class="align-label">
+                        <!-- Actuator information button that displays the selected actuator that is saved in the Cookie. -->
                         <a id="actuatorbutton" href="" target="_blank">
                             <button class="btn btn-primary mybtn-lg button1 fancybutton" type="button">
                             <i class="fa fa-info-circle fa-10x" aria-hidden="true"></i><span class="invisible">Actuator <p>Information</p></span><hr><span class="test"><?php echo json_encode($_COOKIE['Actuator_Type']);?></span></button>
                         </a>  
                         <div>
+                        <!-- Form for threshold. -->
                          <form action="/api.php" method="GET" id="thresholdform">
 <?php
+                        // PHP that echoes the threshold as placeholder.
 						if (isset($_COOKIE['Threshold']))
 						{
 							$Threshold = ($_COOKIE['Threshold']);
@@ -80,6 +88,7 @@
 							echo('<input type="number" name="Threshold" placeholder="threshold">');
 						}
 ?>
+                        <!-- Button for sending the threshold to the database. -->
                             <button form="thresholdform" class="btn btn-primary"><i class="fa fa-paper-plane-o fa-3x thresholdsubmit" aria-hidden="true"></i><span class="thresholdsubmit">Submit</span></button>
                         </form> 
                         </div> 
@@ -91,6 +100,7 @@
             </div>
             
                             <script type="text/javascript">
+                            // Function that syncs the data realtime and puts it in the sensordata paragraph every 0.5 second using AJAX.
                                 function getSensorData()
                                 {
                                     $.ajax({
@@ -107,7 +117,7 @@
 
                             getSensorData();
                             setInterval(getSensorData, 500);
-
+                            // Switch that determines what wiki page to load based on the sensor or actuator selected.
                             switch(<?php echo json_encode($_COOKIE['Sensor_Type'])?>){
                                 case "Track sensor": $("#sensorbutton").attr("href", "https://www.dfrobot.com/wiki/index.php/Line_Tracking_Sensor_for_Arduino_(SKU:SEN0017)")
                                 break;

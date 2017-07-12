@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <!-- Links for CSS, bootstrap, fonts and C3 + D3. -->
     <title>Visualization Page</title>
     <link rel="stylesheet" type="text/css"
           href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -17,6 +18,7 @@
 </head>
 
 <body>
+    <!-- Bootstrap responsive navbar. -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -41,11 +43,12 @@
         </div>
     </nav>
 
-
+    <!-- The chart div is used later for the JavaScript to create the graph. -->
     <div id="chart"></div>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"
   integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
   crossorigin="anonymous"></script>
+  
 <?php 
     require_once('config.php');
     require_once('database.php');

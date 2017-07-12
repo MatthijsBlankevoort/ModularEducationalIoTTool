@@ -22,7 +22,7 @@
 			// Check if the variable Message is set in the api.
 				if (isset($_GET['Message']))
 				{
-					// Switch that echo's the error message that the api returns.
+					// Switch that echo's the error message that the API returns.
 					switch (($_GET['Message']))
 					{
 						case '1':

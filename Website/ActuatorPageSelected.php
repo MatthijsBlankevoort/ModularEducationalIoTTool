@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- Links for CSS, JS, fonts and bootstrap. -->
     <title>Actuator Page</title>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="style.css">
@@ -13,6 +14,7 @@
 
 </head>
 <body>
+<!-- JavaScript for debug purposes. -->
     <script>
     function actuator(){
     if($('#radio_button_id')[0].checked) {
@@ -23,6 +25,7 @@
     }
     }
     </script>
+    <!-- Bootstrap navbar. -->
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
@@ -48,10 +51,12 @@
     </nav>
 
 
-
+<!-- Bootstrap container for responsive website. -->
 <div class="container">
+<!-- Header showing the selected Actuator. -->
   <h1 class="sensorTitle">Actuator Device:</h1>
           <div class="row">
+          <!-- PHP that echoes the selected actuator that's saved in the Cookies. -->
             <?php
 			if(isset($_COOKIE['Actuator_Type']) and ($_COOKIE['Device2']))
 			{
@@ -68,6 +73,7 @@
               	}
 			}
             ?>
+            <!-- GET request that select the selected sensor module.  -->
 		<form method="GET" action="api.php" onsubmit="actuator()">
 		    <div class="form-group form-center text-center loginForm">
               <section class="sensorButtons">
@@ -83,7 +89,7 @@
                               //store the results in the form of an string in result and filter only the first colum out
                               $result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 
-
+                              // PHP script that echoes radiobuttons with all of the non active sensors of the database.
                               for($i = 0; $i < ($stmt->rowCount()); $i++)
                               {
                   				echo('<div class="radioSensor">');
