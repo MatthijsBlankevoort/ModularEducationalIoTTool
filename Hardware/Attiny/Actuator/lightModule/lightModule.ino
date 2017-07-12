@@ -22,9 +22,9 @@
 
 
 int byteRcvd = 0;
+int threshold = 0;
 
 
-o
 void setup() {
   TinyWireS.begin(I2C_SLAVE_ADDR);      // init I2C Slave mode
   pinMode(ledPin, OUTPUT);

@@ -1,6 +1,8 @@
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines 
 #include "usiTwiSlave.h" 
 
+#define I2C_SLAVE_ADDR 0x03  
+
 
 int ledPin = 1; //LED pin on attiny
 
@@ -9,7 +11,6 @@ int pirState = LOW; //Start with no motion detected
 int val = 0; //Declare variable for the value of the input
 byte byteRcvd;
 int motionDetected;
-#define I2C_SLAVE_ADDR 2  
 
 void setup() {
   TinyWireS.begin(I2C_SLAVE_ADDR);      // init I2C Slave mode 
@@ -25,7 +26,6 @@ void loop(){
     motionDetected = 1;
     digitalWrite(ledPin, HIGH); //Turn on LED 
       if (pirState == LOW) {
-        Serial.println("Motion detected!");
         pirState = HIGH; //Set PIR to high so the motion ends.
     }
   } else {
@@ -33,7 +33,6 @@ void loop(){
       motionDetected = 0;
       
       if (pirState == HIGH){
-        Serial.println("Motion ended!");
         pirState = LOW;
     }
   }
