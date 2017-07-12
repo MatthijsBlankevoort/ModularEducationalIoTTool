@@ -293,7 +293,7 @@ if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && (!isset($_GET['
 		echo('Unknown Function');
 	}
 }
-//127.0.0.1/api.php?deviceId=TEST2&deviceFunctie=actuator&sensorId=001&value=1
+// 127.0.0.1/api.php?deviceId=TEST2&deviceFunctie=actuator&sensorId=001&value=1
 // deviceId=TEST2
 // deviceFunctie=actuator
 // sensorId=001
@@ -392,7 +392,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 				{
 					if ($stmt->rowCount() > 0)
 					{
-					//Todo: Haal configuratie uit Database op basis van ID, en functie
+
 					//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
 					$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' 
 											and Sensor.Sensor_ID = '$sensorId' 
