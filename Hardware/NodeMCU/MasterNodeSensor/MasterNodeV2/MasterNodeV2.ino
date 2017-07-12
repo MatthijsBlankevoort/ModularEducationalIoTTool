@@ -1,11 +1,11 @@
-#include<OpenWiFi.h>
-#include  <ESP8266HTTPClient.h>
+#include <OpenWiFi.h>
+#include <ESP8266HTTPClient.h>
 #include <ESP8266WiFi.h>
 #include <WiFiManager.h>
 #include <Wire.h>
 #include "config.h"
 
-#define device 2 //hardcoded device id for testing purposes
+#define device 0x01 //hardcoded device id for testing purposes
 
 
 int oldTime = 0;
@@ -54,7 +54,7 @@ void setup() {
   wifiManager.autoConnect(configSSID.c_str());
 }
 
-void get_Light() {
+void get_data() {
 
   Wire.beginTransmission(device);
   Wire.write(0xAA);
@@ -64,7 +64,6 @@ void get_Light() {
   Wire.requestFrom(device, 3);
   while (Wire.available()) {
     sensorId = Wire.read();//address slave
-    //lightVal = (Wire.read() | Wire.read() << 8);//licht waarde
     lightVal = Wire.read();//licht waarde
     checkVal = Wire.read();//check
   }
@@ -77,7 +76,7 @@ void get_Light() {
 
 void loop() {
   ESP.wdtFeed();
-  get_Light();
+  get_data();
   Serial.println("Address, value, check: ");
 
   delay(250);
@@ -111,7 +110,6 @@ void requestMessage()
 {
 
   HTTPClient http;
-  //String requestString = serverURL + "/api.php?t=gqi&d=" + chipID + "&v=2";
   String requestString = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=sensor" + "&sensorId=00" + sensorId + "&value=" + lightVal; //url om data te verzenden naar de database
   String requestString2 = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=sensor"; //url om sensor ID op te vragen
   if (sensorId == 0) { //als er geen sensorId is dan wordt die eerst opgevraagd

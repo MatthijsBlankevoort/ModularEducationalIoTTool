@@ -53,17 +53,17 @@ void setup() {
   wifiManager.autoConnect(configSSID.c_str());
 }
 
-void giveCommand(int command, int threshold) {
+void sendData(int command, int threshold) {
   Serial.print("command: ");
   Serial.println(command);
-  Wire.beginTransmission(actuator);
+  Wire.beginTransmission(actuatorId);
   Wire.write(command);
   Wire.write(threshold);
  // Wire.write(command >> 8);
   Wire.endTransmission();
   delay(5);
 
-  Wire.requestFrom(actuator, 2);
+  Wire.requestFrom(actuatorId, 2);
   while (Wire.available()) {
     checkVal = Wire.read();//check if slave received correct data
     actuatorId = Wire.read();//address slave
@@ -108,8 +108,36 @@ void requestMessage()
 {
 
   HTTPClient http;
-  //String requestString = serverURL + "/api.php?t=gqi&d=" + chipID + "&v=2";
-  String requestString = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=actuator"  + "&sensorId=001"  + "&value=1" ;
+  String requestString = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=actuator"  + "&sensorId=00" + actuatorId ;
+  String requestString2 = serverURL + "/api.php?deviceId=" + chipID + "&deviceFunctie=actuator"; //url om sensor ID op te vragen
+  if (actuatorId == 0) { //als er geen actuatorId bekend is dan wordt die eerst opgevraagd
+    http.begin(requestString2);
+
+    uint16_t httpCode = http.GET();
+    //Response code for actuator module
+    if (httpCode == 200)
+    {
+      response = http.getString();
+      Serial.print("response: ");
+      Serial.println(response);
+      response.toCharArray(response2, 100);
+      actuatorId = atoi(response2);
+
+      if (response == "-1")
+      {
+        printDebugMessage("There are no messages waiting in the queue");
+      }
+    }
+    else
+    {
+      //ESP.reset();
+    }
+
+    http.end();
+  }
+  
+  
+ if(actuatorId != 0) {
 
   http.begin(requestString);
 
@@ -149,14 +177,14 @@ void requestMessage()
   }
 
   http.end();
-}
+}}
 
 //See what activity is linked to the config
 void checkResponse(int configuration, int value) {
 
   //lightsensor/led config
   //if (configuration == 20) {
-    giveCommand(value, threshold);
+    sendData(value, threshold);
   //}
 
 
