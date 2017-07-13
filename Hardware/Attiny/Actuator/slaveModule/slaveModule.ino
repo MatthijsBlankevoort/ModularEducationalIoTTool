@@ -20,9 +20,7 @@
 #define I2C_SLAVE_ADDR  0x02
 #define ledPin   1
 
-uint8_t flipped = 0;
 uint16_t lichtWaarde = 0;
-uint8_t a = 55;
 unsigned char bytes[4];
 int byteRcvd = 0;
 
@@ -36,7 +34,6 @@ void setup() {
 void loop() {
 
   if (TinyWireS.available()) {          // got I2C input!
-    // byteRcvd = (TinyWireS.receive() | TinyWireS.receive() << 8);     // get the 2 bytes from master
     byteRcvd = TinyWireS.receive();     // get the 2 bytes from master
     TinyWireS.send(byteRcvd);           //check
     TinyWireS.send(I2C_SLAVE_ADDR);     //ID

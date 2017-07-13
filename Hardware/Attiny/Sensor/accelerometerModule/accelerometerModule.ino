@@ -17,7 +17,7 @@
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines
 #include "usiTwiSlave.h"
 
-#define I2C_SLAVE_ADDR  0x02
+#define I2C_SLAVE_ADDR  0x05
 int xPin = 1;
 int yPin = 3;
 int zPin = 4;

@@ -16,8 +16,8 @@
 #include "TinyWireS.h"                  // wrapper class for I2C slave routines
 #include "usiTwiSlave.h"
 
-#define I2C_SLAVE_ADDR  0x04
-#define trackerPin      4
+#define I2C_SLAVE_ADDR  0x01
+#define trackerPin      1
 
 
 uint16_t sensorWaarde = 0;
@@ -43,7 +43,6 @@ void loop() {
     TinyWireS.send(I2C_SLAVE_ADDR);     //ID
 
   }
-  delay(1000);
 
 }
 
