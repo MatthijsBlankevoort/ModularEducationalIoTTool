@@ -12,7 +12,7 @@
   require_once('database.php');
 /////////////////////////////////////////////////////
 
-  
+////////////////////////////////////////////////////////////////////////////////////////////////////  
 //Make sure the Devices are in the Database
 if(isset($_GET['Device1']) && isset($_GET['Device2']))
 {
@@ -191,7 +191,8 @@ if(isset($_GET['Device1']) && isset($_GET['Device2']))
 	
 
 }
-// are you going already? well then if you realy want to we need to make sure you never where here in the first place
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// are you going already? well then if you realy want to go we need to make sure you never where here in the first place
 if(isset($_GET['logout']))
 {
 	// disconnect the sensor from the device
@@ -234,6 +235,7 @@ if(isset($_GET['logout']))
 	
 	header("location: LoginPage.php");
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
 // Update config set at the website and send to Database
 if(isset($_GET['deviceId']) && isset($_GET['configuratie']))
 {
@@ -251,9 +253,11 @@ if(isset($_GET['deviceId']) && isset($_GET['configuratie']))
 			echo 'nope';
 		}
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //Get variables from sensor NodeMCU
 if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && (!isset($_GET['value'])))
 {
+	//store the cokkies in varibels
 	$Device = ($_GET['deviceId']);
 	$DeviceFunction = ($_GET['deviceFunctie']);
 	if($DeviceFunction == 'sensor')
@@ -261,17 +265,22 @@ if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && (!isset($_GET['
 		$stmt = $con_db->prepare("select Sensor_ID from Sensor where Device_Device_ID = '$Device'");
 		if ($stmt->execute())
 		{
+			// if you get 1 or 2 back in your row count betekent het dat er meerdere aan het apparaat gekopeld zijn.
+			// in presiepe is dit niet erg en zal niks stuk maken maar voor de zekerheid houden we daar wel rekening mee
 			$result = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 			if($stmt->rowCount() > 0) 
 			{
 				echo($result[0]);
 			}
 			else
+			// niks terug? oke geef dan maar 0 terug kan zie je dat er iets niet klopt.
+			// samen met de nodemsu code zou het sensor id 000 zijn
 			{
 				echo('0');
 			}
 		}
 	}
+	// het zelfde doen we bij de actuator alleen zoeken we dan in de actuator table
 	elseif($DeviceFunction == 'actuator')
 	{
 		$stmt = $con_db->prepare("select Actuator_ID from Actuator where Device_Device_ID = '$Device'");
@@ -289,11 +298,13 @@ if (isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && (!isset($_GET['
 		}
 	}
 	else
+	// tickfoutje in je url? geen probleem hier heb je een foutmelding	
 	{
 		echo('Unknown Function');
 	}
 }
-// 127.0.0.1/api.php?deviceId=TEST2&deviceFunctie=actuator&sensorId=001&value=1
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//127.0.0.1/api.php?deviceId=TEST2&deviceFunctie=actuator&sensorId=001&value=1
 // deviceId=TEST2
 // deviceFunctie=actuator
 // sensorId=001
@@ -325,13 +336,15 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 	
 			if($deviceFunctie == "sensor") 
 			{ 
+				// weet je zeker dat er een device is gekoppeld aan een sensor?
 				$stmt = $con_db->prepare("select Sensor_ID,Device_Device_ID from Sensor where Device_Device_ID = '$deviceID'and Sensor_ID = '$sensorId'");
 				if($stmt->execute())
 				{
+					// meer dan 1 terug? geen probleem
 					if ($stmt->rowCount() > 0)
 					{				
 
-
+					// pak al de sensor log data van de server zo dat we kunnen kijken hoe veel er in zitten
 					$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' 
 											and Sensor.Sensor_ID = '$sensorId' and Device_Device_ID = '$deviceID' 
 											order by Sensor_Timestamp ");
@@ -357,6 +370,7 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 							// else insert a new data entry
 							else
 							{
+								//zijn er nog geen enty's in de sensor log table met dat sensor_ID? maak er dan 1 aan dan kunnen we daarna weer de code hierboven gebruiken
 								$stmt = $con_db->prepare("insert into Sensor_Log (Sensor_ID,Sensor_Timestamp,Last_Sensor_Data) value ('$sensorId',now(),'$value')");
 								if ($stmt->execute())
 								{
@@ -382,18 +396,16 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 					echo('Unable to Execute search for matching device and sensor');
 				}
 			}
-			///////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////device functie == actuator
 			elseif($deviceFunctie == "actuator") 
 			{
-
+			// hier doen we het zelfde maar dan voor de actuator
 			$stmt = $con_db->prepare("SELECT Sensor_ID from Sensor where sensor_ID = '$sensorId'");
 				if($stmt->execute())
 					
 				{
 					if ($stmt->rowCount() > 0)
 					{
-
-					//select * from Sensor_Log where Sensor_ID = 001 ORDER BY Sensor_Timestamp DESC LIMIT 20;
 					$stmt = $con_db->prepare("select Last_Sensor_Data,Sensor_Timestamp from Sensor_Log, Sensor where Sensor_Log.Sensor_ID = '$sensorId' 
 											and Sensor.Sensor_ID = '$sensorId' 
 											order by Sensor_Timestamp DESC Limit 1");	
@@ -464,16 +476,19 @@ if(isset($_GET['deviceId']) && isset($_GET['deviceFunctie']) && isset($_GET['sen
 		echo('Unable to Contact Database');
 	}
 }	
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//doe snizzel voor de sensorpage
 if (isset($_GET['sensorpage']))
 {
 	
-
+//kijk in de database voor sensoren die gemarkeert zijn als active=0 (inactief)
+//active = 1 betekend dat deze actief is. je kan er dan vanuit gaan dat er ook een device aan gekopeld is.
 $stmt = $con_db->prepare("Select Sensor_type, Sensor_ID from Sensor where Sensor_active = '0';");
 // Next fire the sql statmend at the db with the first device.
 $stmt->execute();
 //store the results in the form of an string in result and filter only the first colum out
+//welcome bij php. we moeten hierbij 2x de sql statmend uitvoeren om 2 waardes uit te lezen....
 $result0 = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
-// Next fire the sql statmend at the db with the first device.
 $stmt->execute();
 $result1 = $stmt->fetchAll(PDO::FETCH_COLUMN, 1);
 // echo('hoi');
@@ -485,6 +500,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 		header("Location: SensorPage.php"); 	
 	// echo($result0[$i]);
 	// echo($_GET['sensor']);
+	// loop tot dat je sensor type gelijk is aan de gene die in de url staat.
 	if (($_GET['sensor']) == ($result0[$i]))
 	{
 		
@@ -495,6 +511,8 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 		$stmt->execute();
 		$DISTINCT = $stmt->fetchAll(PDO::FETCH_COLUMN, 0);
 		// print_r($DISTINCT);
+		// set de correcte sensor id voor de sensor
+		// als je dus meerdere sensor types toevoegd in de database moet je zo ook in deze code verwerken.
 		for($i = 0; $i < ($stmt->rowCount()); $i++)
 		{
 			// echo('test');
@@ -549,7 +567,8 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 		}
 		else
 		{
-			
+			// update de sensor die is gecelecteerd naar active en voeg de device name hierbij. hier kunnen we dus sensoren/ actuatoren(in de volgende functie) actief maken.
+			// als laatste mocht er al een senor active zijn onder de zelfde device name zet die op inactive en verander de device name naar Standby
 			$stmt = $con_db->prepare("Update Sensor SET Device_Device_ID = '$Device', Sensor_active = '1' where Sensor_Type = '$Sensor_Type' and Sensor_ID = $Sensor_ID");
 			if ($stmt->execute())
 			{
@@ -587,10 +606,10 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 
 }
 }
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_GET['actuatorpage']))
 {
-
+// doe het zelfde als bij de sensorpage verander alleen de actuator.
 $stmt = $con_db->prepare("select Actuator_Type, Actuator_ID from Actuator where Actuator_active = '0';");
 // Next fire the sql statmend at the db with the first device.
 $stmt->execute();
@@ -678,6 +697,7 @@ for($i = 0; $i < ($stmt->rowCount()); $i++)
 
 }
 }
+////////////////////////////////////////////////////////////////////////////////////////////////////
 if (isset($_GET['Threshold']))
 {
 	if (!isset($_COOKIE['Actuator_ID']))
